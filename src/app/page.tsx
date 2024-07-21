@@ -1,113 +1,210 @@
-import Image from "next/image";
+import BlogCard from "@/components/cards/BlogCard";
+import CategoryCard from "@/components/cards/CategoryCard";
+import ProductCard from "@/components/cards/ProductCard";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+const BlogSection = () =>{
+  
+  const blogs = [
+    {"imageUrl":"/blog1.avif","date":"Janvier 20 2024","title":"Blog","text":""},
+    {"imageUrl":"/blog2.avif","date":"Janvier 22 2024","title":"Blog","text":""},
+    {"imageUrl":"/blog3.jpg","date":"Janvier 30 2024","title":"Blog","text":""},
+  ]
+
+  return(
+    <div>
+      <h1 className="title text-center pt-32 pb-12">Dernières mises à jour & articles</h1>
+      <div className="main-section flex gap-4 justify-between blog-section">
+          {blogs.map((blog:BlogCardData,index)=><BlogCard key={index} imageUrl={blog.imageUrl} title={blog.title} text={blog.text} date={blog.date} />)}
+      </div>
+    </div>
+  )
+}
+
+const FillerSection = () =>{
+  return(
+    <div className="pt-32">
+      <div className="relative h-[400px]">
+        <img src="/bg2.jpg" alt="" className="w-full h-full object-cover opacity-50 absolute"/>
+        <div className="content text-center w-full h-full absolute flex flex-col justify-center">
+          <div className="main-section flex flex-col justify-center items-center">
+            <h1 className="title py-8">Vivre Sain</h1>
+            <p className="pb-6">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquid sed nihil obcaecati? Distinctio odio aperiam quis cupiditate, eum porro facere.</p>
+            <button className="secondary-btn w-60">Explorez nos produits</button>
+          </div>
         </div>
       </div>
+    </div>
+  )
+}
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+const OurProducts = () => {
+  const products = [
+    {'name':'Ananas','type':'Fruit','price':'3000','imageUrl':'/images/ananas.png'},
+    {'name':'Pomme','type':'Fruit','price':'5000','imageUrl':'/images/pomme.png'},
+    {'name':'Tomate','type':'Legume','price':'3000','imageUrl':'/images/tomate.png'},
+    {'name':'Laitue','type':'Legume','price':'2000','imageUrl':'/images/laitue.png'},
+    {'name':'Raisins','type':'Fruit','price':'9000','imageUrl':'/images/raisins.png'},
+    {'name':'Patate','type':'Legume','price':'1000','imageUrl':'/images/patate.png'},
+  ]
+
+  return(
+    <div className="main-section pt-32">
+      <h1 className="title text-center py-8">Produits populaires</h1>
+      <div className="grid grid-cols-3 justify-center justify-items-center gap-8 products-section">
+        {products.map((product:ProductCardData,index)=><ProductCard key={index} price={product.price} name={product.name} imageUrl={product.imageUrl}  />)}
       </div>
+    </div>
+  )
+}
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+const FewReasons = () => {
+  const StatBox = (props:{text:string, number:string,url:string}) =>{
+    return(
+      <div className="flex">
+        <img src={props.url} alt="" className="block h-16 W-16"/>
+        <div>
+          <h3 className="text-white text-4xl">{props.number}</h3>
+          <p className="light-green-text">{props.text}</p>
+        </div>
       </div>
-    </main>
+    )
+  }
+  return (
+    <div className="pt-32">
+      <div className="py-32 bg-dark-green">
+          <div className="main-section">
+            <h1 className="title text-white pb-8">Pourquoi choisir JootCi</h1>
+            <p className="text-balance text-white pb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque itaque cupiditate asperiores necessitatibus quidem voluptates nulla distinctio accusamus ad. In aspernatur error voluptate natus totam iste mollitia nemo assumenda ea.</p>
+            <button className="secondary-btn">Explorez</button>
+          </div>
+      </div>
+      <div className="bg-light-green relative">
+        <img src="/bg-img-drawings.png" alt="" className="block absolute opacity-10 h-full w-full object-cover" />
+        <div className="grid grid-cols-4 justify-between py-20 main-section stat-section">
+          <StatBox text="Clients satisfaits" number="142" url="stars.svg" />
+          <StatBox text="Agriculteurs experts" number="124" url="farmer.svg" />
+          <StatBox text="Produits" number="109" url="wheat.svg" />
+          <StatBox text="Commandes" number="189" url="cart.svg" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const BannerSection = () => {
+  const Banner = (props:{text:string,overlayColor:string,}) => {
+    return(
+      <div className="w-1/2 h-80 relative rounded-lg border banner-section-item">
+        <div className={"overlay"+ props.overlayColor +" absolute z-10 h-full w-full"}></div>
+        <img src="/images/banner-1.jpeg" alt="" className="absolute h-full w-full object-cover" />
+        <div className="absolute z-20 h-full flex flex-col justify-center p-4">
+          <span className="text-white">100% Organique</span>
+          <h2 className="text-white sub-title py-6">{props.text}</h2>
+          <button className="secondary-btn-yellow w-24">Achetez</button>
+        </div>
+      </div>
+    )
+  }
+  return(
+    <div className="main-section banner-section flex justify-between gap-20 pt-32">
+      <Banner text="Produits frais tous les jours" overlayColor=""/>
+      <Banner text="Qualite garantie" overlayColor="-dark"/>
+    </div>
+  )
+}
+
+const OurCategories = () => {
+  const categories : Array<CategoryCardData> = [
+    {'title': 'Fruits', 'imagePath': '/images/icons/fruit-images.avif','url':''},
+    {'title': 'Legumes', 'imagePath': '/images/icons/vegetables-images.avif','url':''},
+    {'title': 'Lait', 'imagePath': '/images/icons/dairy-images.webp','url':''},
+    {'title': 'Boeuf', 'imagePath': '/images/icons/steak-images.avif','url':''},
+
+  ]
+  return(
+    <div className="main-section pt-32">
+      <h1 className="title text-center p-8">Nos Categories</h1>
+      <div className="grid grid-cols-4 items-center justify-between category-section">
+        {categories.map((category:CategoryCardData,index)=><CategoryCard key={index}  title={category.title} imagePath={category.imagePath} url={category.url} />)}
+      </div>
+    </div>
+  )
+}
+
+const AboutSection = () => {
+  return(
+    <div className="main-section pt-32">
+      <div className="flex about-section gap-4">
+        <img src="/deliveryPerson.avif" alt="" className="block  about-section-item w-1/2 max-h-[650px] object-cover"/>
+        <div className="about-section-item w-1/2">
+          <h1 className="title py-8">Fournisseur de produits frais et sains</h1>
+          <p className="pb-6">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquam veritatis dolorum labore ratione, voluptatum ipsa, odit perspiciatis eius suscipit, earum cum. Eveniet minima fuga voluptatum at temporibus laudantium eius?</p>
+          <button className="secondary-btn">Explorez</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const FeatureSection = () => {
+
+  const FeatureItem = (props:{title:string, url:string ,text:string}) =>{
+    return(
+      <div className="flex justify-center feature-section-item">
+        <img src={"/icons/"+props.url} alt="" height={60} width={60} className="block"/>
+        <div>
+          <h3 className="font-bold">{props.title}</h3>
+          <span>{props.text}</span>
+        </div>
+      </div>
+    )
+  }
+  return(
+    <div className="feature-section grid grid-cols-4 items-center feature-section main-section border border-gray-300 py-5 rounded-lg shadow">
+      <FeatureItem title="Paiement Securise" text="Vos paiements sont 100% securises" url="card.svg"/>
+      <FeatureItem title="Livraison gratuite" text="Pour les commandes de plus de 50.000 FCFA" url="truck.svg"/>
+      <FeatureItem title="Localisateur de magasin" text="Trouvez le magasin le plus proche" url="store.svg"/>
+      <FeatureItem title="Remboursement" text="Remboursement garantie" url="receipt.svg"/>
+    </div>
+  )
+}
+
+const HeroSection = () => {
+  return (
+    <div className="hero h-[90vh] w-full relative">
+      <img src="/bg.avif" alt="" className="h-full w-full absolute object-cover opacity-90" />
+      
+      <div className="main-section">
+      <div className="tagline absolute top-1/3 ">
+        <div className="">
+          <h1 className="main-title">Produits sains et organiques</h1>
+          <button className="main-btn">Achetez maintenant</button>
+        </div>
+      </div>
+      </div>
+    </div>
+  )
+};
+
+
+
+export default function Home() {
+
+  return (
+    <div>
+      <Header />
+      <HeroSection/>
+      <FeatureSection/>
+      <AboutSection/>
+      <OurCategories/>
+      <BannerSection/>
+      <FewReasons/>
+      <OurProducts/>
+      <FillerSection/>
+      <BlogSection/>
+      <Footer />
+    </div>
   );
 }

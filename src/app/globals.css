@@ -1,12 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+  --main-green: #16a34a; 
+  --main-dark-green: #127d39;
+  --green: #50a72c; 
+  --main-darkest-green: #29451c;
+
+  --grey: #7d8978;
+  --light-green-text: #aef490;
+
+  --button-yellow: rgb(241 202 0);
 }
+
+/* *{
+  box-shadow: 0 0 0 2px red;
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -16,18 +33,166 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@layer components{
+  /*Titles*/
+  .main-title{
+    @apply text-8xl font-semibold text-balance max-w-[800px] pb-4;
+  }
+
+  .title{
+    @apply text-5xl font-semibold
+  }
+
+  .sub-title{
+    @apply text-3xl font-semibold
+  }
+
+  .sub-title-section{
+    @apply text-xl font-semibold;
+  }
+  /*Buttons*/
+  .main-btn{
+    @apply p-3 bg-green-600 text-white font-semibold flex justify-center items-center rounded-lg text-xl;
+  }
+  .secondary-btn{
+    @apply p-3 bg-green-600 text-white font-semibold flex justify-center items-center rounded-lg text-lg;
+  }
+  .secondary-btn-yellow{
+    @apply p-3 text-white font-semibold flex justify-center items-center rounded-lg text-lg;
+    background-color: var(--button-yellow);
+  }
+}
+*{
+  box-sizing: border-box;
+}
+body {
+  background-color: white;
+  font-family: "Manrope", sans-serif;
+}
+
+.mobile-menu{
+  display: none;
+}
+.main-section{
+  width: 95vw;
+  margin: 0 auto;
+  max-width: 1440px;
+}
+
+/*Banner Section start*/
+.overlay{
+  background: linear-gradient(45deg, var(--main-green), transparent);
+}
+.overlay-dark{
+  background: linear-gradient(45deg, var(--main-dark-green), transparent);
+}
+/*Banner Section end*/
+.bg-dark-green{
+  background-color: var(--main-darkest-green);
+}
+.bg-light-green{
+  background-color: var(--green);
+}
+.light-green-text{
+  color: var(--light-green-text);
+}
+
+/* .filler-section{
+  background-image: url("/bg2.jpg");
+  background-size: cover;
+} */
+
+.footer{
+  color: white;
+}
+
+@media (max-width:1080px) {
+  .feature-section{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: start;
+    gap: 16px;
+  }
+  .feature-section-item{
+    justify-content: start;
+  }
+
+  .category-section{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+    gap: 16px;
+  }
+}
+
+@media (max-width:900px) {
+  .products-section{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+    gap: 16px;
+  }
+  .stat-section{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .newsletter{
+    flex-direction: column;
+  }
+  .footer-section{
+    flex-direction: column;
+  }
+}
+
+@media (max-width:640px) {
+  .desktop-menu{
+    display: none;
+  }
+  .mobile-menu{
+    display: flex;
+  }
+  .main-title{
+    font-size: 4rem;
+  }
+  .feature-section{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    justify-content: start;
+    gap: 16px;
+  }
+  .feature-section-item{
+    justify-content: start;
+  }
+  .about-section{
+    flex-direction: column;
+  }
+  .about-section-item{
+    width: 100%;
+  }
+  .category-section{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    justify-items: center;
+    gap: 16px;
+  }
+  .stat-section{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .products-section{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    justify-items: center;
+    gap: 16px;
+  }
+  .banner-section{
+    flex-direction: column;
+    justify-content: center;
+  }
+  .banner-section-item{
+    width: 100%;
+  }
+  .blog-section{
+    flex-direction: column;
+    align-items: center;
+  }
+  
 }
