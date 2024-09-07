@@ -75,7 +75,7 @@ const FewReasons = () => {
     <div className="pt-32">
       <div className="py-32 bg-dark-green">
           <div className="main-section">
-            <h1 className="title text-white pb-8">Pourquoi choisir JootCi</h1>
+            <h1 className="title text-white pb-8">Pourquoi choisir Tibb-Jox</h1>
             <p className="text-balance text-white pb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque itaque cupiditate asperiores necessitatibus quidem voluptates nulla distinctio accusamus ad. In aspernatur error voluptate natus totam iste mollitia nemo assumenda ea.</p>
             <button className="secondary-btn">Explorez</button>
           </div>
@@ -139,8 +139,24 @@ const AboutSection = () => {
       <div className="flex about-section gap-4">
         <img src="/deliveryPerson.avif" alt="" className="block  about-section-item w-1/2 max-h-[650px] object-cover"/>
         <div className="about-section-item w-1/2">
-          <h1 className="title py-8">Fournisseur de produits frais et sains</h1>
-          <p className="pb-6">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa aliquam veritatis dolorum labore ratione, voluptatum ipsa, odit perspiciatis eius suscipit, earum cum. Eveniet minima fuga voluptatum at temporibus laudantium eius?</p>
+          <h1 className="title py-8"> A propos</h1>
+          <p className="pb-6">Tibb - Jox est une application révolutionnaire de commande gratuite qui comble le fossé entre les entre les agriculteurs et l'industrie
+            l'industrie de l'alimentation et des boissons. Nous
+            nous mettons en relation les restaurants,
+            supermarchés et les hôtels
+            avec les agriculteurs locaux, ce qui facilite
+            facile de s'approvisionner en produits
+            produits les plus frais et de la meilleure
+            de la plus haute qualité. <br /> <br /> 
+            Notre plateforme
+            conviviale rationalise le
+            processus de commande, garantissant
+            une livraison dans les délais et
+            et permet aux acheteurs et aux vendeurs
+            et les vendeurs de la chaîne d'approvisionnement
+            d'approvisionnement agricole
+
+            </p>
           <button className="secondary-btn">Explorez</button>
         </div>
       </div>
@@ -163,8 +179,8 @@ const FeatureSection = () => {
   }
   return(
     <div className="feature-section grid grid-cols-4 items-center feature-section main-section border border-gray-300 py-5 rounded-lg shadow">
-      <FeatureItem title="Paiement Securise" text="Vos paiements sont 100% securises" url="card.svg"/>
-      <FeatureItem title="Livraison gratuite" text="Pour les commandes de plus de 50.000 FCFA" url="truck.svg"/>
+      <FeatureItem title="Paiement Securises" text="Vos paiements sont 100% securises" url="card.svg"/>
+      <FeatureItem title="Livraison rapides" text="Vos commandes a votre potre en un flash" url="truck.svg"/>
       <FeatureItem title="Localisateur de magasin" text="Trouvez le magasin le plus proche" url="store.svg"/>
       <FeatureItem title="Remboursement" text="Remboursement garantie" url="receipt.svg"/>
     </div>

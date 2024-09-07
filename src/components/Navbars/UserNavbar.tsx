@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link"
-import { FavoriteIcon, HomeIcon, NotificationIcon, ProfileIcon, ReceiptIcons, SettingsIcon } from "../Icons/Icons"
+import { CreditCardIcon, FavoriteIcon, HomeIcon, NotificationIcon, ProfileIcon, ReceiptIcons, SettingsIcon } from "../Icons/Icons"
 import { useState, useRef, useEffect } from "react";
 
 function NavBarItem(props:{url:string,text:string,icon:React.ReactElement}){
@@ -63,6 +63,9 @@ export function UserNavBar(){
                 </li>
                 <li>
                     <NavBarItem url="/user/favorite" text="Favoris" icon={<FavoriteIcon/>} />                
+                </li>
+                <li>
+                    <NavBarItem url="/user/payment-methods" text="Paiements" icon={<CreditCardIcon/>} />                
                 </li>
                 <li>
                     <NavBarItem url="/user/orders" text="Commandes" icon={<ReceiptIcons/>} />                
