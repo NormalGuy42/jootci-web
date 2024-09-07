@@ -16,6 +16,7 @@
   --main-darkest-green: #29451c;
 
   --grey: #7d8978;
+  --light-grey-text: #c0bfbfd9;
   --light-green-text: #aef490;
 
   --button-yellow: rgb(241 202 0);
@@ -54,7 +55,7 @@
   }
 
   .sub-title-section{
-    @apply text-xl font-semibold;
+    @apply text-2xl font-bold;
   }
   /*Buttons*/
   .main-btn{
@@ -76,6 +77,7 @@ body {
   font-family: "Manrope", sans-serif;
 }
 
+
 .mobile-menu{
   display: none;
 }
@@ -84,6 +86,62 @@ body {
   margin: 0 auto;
   max-width: 1440px;
 }
+header{
+  position: relative;
+  z-index: 2;
+  background-color: white;
+}
+header li a:hover{
+  color: var(--main-green);
+}
+.nav-item{
+  cursor: pointer;
+}
+.nav-item:hover svg{
+  fill: var(--main-green);
+}
+.nav-item:hover p{
+  color: var(--main-green);
+}
+
+/*Nav bar start*/
+.sidenav{
+  height: 100%;  
+  width: 25%;  
+  min-width: 240px;
+  position: fixed; 
+  z-index: 1; 
+  top: 0; 
+  left: 0; 
+  background-color:#232323; 
+  transition: .5s ease; 
+  overflow-x: hidden; 
+  padding-top: 120px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  background-color: var(--main-green);
+}
+.sidenav li{
+  width: 100%;
+  padding-left: 16px;
+  margin-bottom: 32px;
+}
+.sidenav li a{
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.nav-bar-item svg{
+  fill: white;
+  height: 42px;
+  width: 42px;
+}
+.nav-bar-item p{
+  color: white;
+}
+/*Nav bar end*/
 
 /*Banner Section start*/
 .overlay{
@@ -108,8 +166,20 @@ body {
   background-size: cover;
 } */
 
+
+
 .footer{
   color: white;
+}
+
+.footer .sub-section li{
+  padding-bottom: 16px;
+}
+.footer .light-grey-text{
+  color: var(--light-grey-text);
+}
+.footer .sub-section li a{
+  color: var(--light-grey-text);
 }
 
 @media (max-width:1080px) {
@@ -141,6 +211,14 @@ body {
   .newsletter{
     flex-direction: column;
   }
+  .newsletter-title{
+    flex-direction: column;
+    text-align: center;
+    padding: 8px;
+  }
+  .newsletter .sub-title{
+    font-size: 24px;
+  }
   .footer-section{
     flex-direction: column;
   }
@@ -148,7 +226,30 @@ body {
 
 @media (max-width:640px) {
   .desktop-menu{
-    display: none;
+    position: absolute;
+    top: 96px;
+    z-index: 10;
+    flex-direction: column;
+    background-color: white;
+    width: 100%;
+    left: 0;
+    transition: all .5s;
+    overflow: hidden;
+    height: 0;
+    padding: 0 20px;
+  }
+  .menu-show{
+    height: 240px !important;
+    padding: 20px !important;
+  }
+
+  .sidenav{
+    width: 0;
+    min-width: 0;
+  }
+  .sidenav-show{
+    width: 25%;  
+    min-width: 240px;
   }
   .mobile-menu{
     display: flex;
@@ -195,4 +296,8 @@ body {
     align-items: center;
   }
   
+}
+
+@media (max-width:400px) {
+
 }

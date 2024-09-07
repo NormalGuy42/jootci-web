@@ -1,11 +1,26 @@
-import Footer from "@/components/Footer"
-import Header from "@/components/Header"
+import UserHeader from "@/components/Headers/UserHeader";
+import { AccountIcon, BagIcon } from "@/components/Icons/Icons";
 import Link from "next/link";
 
 const Register = () => {
     return(
         <div>
-            <Header/>
+            <header className="header w-full h-24 border-b border-gray-400">
+                <div className="flex justify-between h-full">
+                    <div className="flex gap-4">
+                        <div className="logo w-20">
+                            <Link href='/'>
+                                <img src="/images/appIcon.png" alt="" />
+                            </Link>
+                        </div>
+
+                    </div>
+                    <div className="flex items-center gap-2 pr-4">
+                        <AccountIcon/>
+                        <BagIcon/>
+                    </div>
+                </div>
+            </header>
             <div className="py-32">
                 <form action="" className="w-[380px] shadow-md mx-auto border rounded border-gray-400 pb-8">
                     <h2 className="sub-title text-center py-8">Creation de compte</h2>
@@ -25,7 +40,7 @@ const Register = () => {
                             </select>
                         </div>
                         <button className="secondary-btn w-[280px]">Connectez vous</button>
-                        <Link href="login">Vous avez deja un compte?</Link>
+                        <Link href="login" className="pt-2">Vous avez deja un compte?</Link>
                     </div>
                 </form>
             </div>

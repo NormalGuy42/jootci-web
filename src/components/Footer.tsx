@@ -7,7 +7,7 @@ const LetterIcon = () => {
 
 const LocationIcon = () => {
   return(
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white" height={40} width={40}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white" height={32} width={32}>
       <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
     </svg>
   )
@@ -15,7 +15,7 @@ const LocationIcon = () => {
 
 const PhoneIcon = () => {
   return(
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white" height={40} width={40}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="white" height={32} width={32}>
       <path d="M16 64C16 28.7 44.7 0 80 0L304 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L80 512c-35.3 0-64-28.7-64-64L16 64zM224 448a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM304 64L80 64l0 320 224 0 0-320z"/>
     </svg>
   )
@@ -25,7 +25,7 @@ const Newsletter = () => {
   return(
     <div className="flex justify-center">
       <div className="newsletter bg-light-green w-[80vw] p-8 flex items-center justify-between rounded-t-lg">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 newsletter-title">
           <LetterIcon/>
           <h2 className="sub-title">Abonnez vous a notre newsletter</h2>
         </div>
@@ -55,7 +55,7 @@ const Footer = () => {
           </div>
           <div>
             <h3 className="sub-title-section pb-4">Explorez</h3>
-            <ul>
+            <ul className="sub-section">
               <li><a href="">A propos</a></li>
               <li><a href="">Nos Produits</a></li>
               <li><a href="">Devenir un vendeur</a></li>
@@ -65,14 +65,14 @@ const Footer = () => {
           </div>
           <div>
             <h3 className="sub-title-section pb-4">Contact</h3>
-            <p>Pour toute question, contactez nous a info@jootci.com</p>
-            <div className="flex py-2">
+            <p className="light-grey-text">Pour toute question, contactez nous a info@jootci.com</p>
+            <div className="flex py-4 items-center">
               <LocationIcon />
-              <p className="max-h-16">1 rue El Hadji Amadou Assane Ndoye, Dakar,</p>
+              <p className="max-h-16 light-grey-text">1 rue El Hadji Amadou Assane Ndoye, Dakar,</p>
             </div>
-            <div className="flex pb-2">
+            <div className="flex pb-4 items-center">
               <PhoneIcon/>
-              <p>70 07 30 08</p>
+              <p className="light-grey-text">70 07 30 08</p>
             </div>
           </div>
         </div>
