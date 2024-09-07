@@ -1,22 +1,9 @@
-"use client";
-
-import Link from "next/link"
-import { CreditCardIcon, FavoriteIcon, HomeIcon, NotificationIcon, ProfileIcon, ReceiptIcons, SettingsIcon } from "../Icons/Icons"
+import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { HomeIcon, ProfileIcon, FavoriteIcon, CreditCardIcon, ReceiptIcons, NotificationIcon, SettingsIcon } from "../Icons/Icons";
+import { NavBarItem } from "./UserNavbar";
 
-export function NavBarItem(props:{url:string,text:string,icon:React.ReactElement}){
-    return(
-        <div className="nav-bar-item">
-            <Link href={props.url}>
-                {props.icon}
-                <p>{props.text}</p>
-            </Link>
-        </div>
-    )
-}
-
-
-export function UserNavBar(){
+export function VendorNavBar(){
     const [navOpen,setNavOpen] = useState(false);
     const sideNavRef = useRef<HTMLDivElement | null>(null);
     

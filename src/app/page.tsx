@@ -1,6 +1,6 @@
-import BlogCard from "@/components/Cards/BlogCard";
-import CategoryCard from "@/components/Cards/CategoryCard";
-import ProductCard from "@/components/Cards/ProductCard";
+import BlogCard from "@/components/cards/BlogCard";
+import CategoryCard from "@/components/cards/CategoryCard";
+import ProductCard from "@/components/cards/ProductCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Headers/Header";
 
