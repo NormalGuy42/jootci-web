@@ -1,5 +1,6 @@
 "use client";
 
+import { FacebookBtn, GoogleBtn } from "@/components/buttons/SocialLoginBtns";
 import UserHeader from "@/components/Headers/UserHeader";
 import { AccountIcon, BagIcon } from "@/components/Icons/Icons";
 import Link from "next/link";
@@ -34,6 +35,10 @@ const Login = () => {
                             <input type="password" placeholder="Entrez votre votre mot de passe" className="p-3 border border-gray-400 w-[280px]"/>
                         </div>
                         <button className="secondary-btn w-[280px] py-2" type="button" onClick={()=>window.location.href="/user"}>Connectez vous</button>
+                        <div className="flex justify-evenly p-4 w-full">
+                            <GoogleBtn/>
+                            <FacebookBtn/>
+                        </div>
                         <Link href="register" className="pt-2">Creez votre compte</Link>
                     </div>
                 </form>

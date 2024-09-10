@@ -1,3 +1,4 @@
+import { GoogleBtn, FacebookBtn } from "@/components/buttons/SocialLoginBtns";
 import UserHeader from "@/components/Headers/UserHeader";
 import { AccountIcon, BagIcon } from "@/components/Icons/Icons";
 import Link from "next/link";
@@ -40,6 +41,10 @@ const Register = () => {
                             </select>
                         </div>
                         <button className="secondary-btn w-[280px]">Connectez vous</button>
+                        <div className="flex justify-evenly p-4 w-full">
+                            <GoogleBtn/>
+                            <FacebookBtn/>
+                        </div>
                         <Link href="login" className="pt-2">Vous avez deja un compte?</Link>
                     </div>
                 </form>
