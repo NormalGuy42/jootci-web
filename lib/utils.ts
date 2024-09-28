@@ -48,10 +48,9 @@ export const formatDateTime = (dateString: Date) => {
   }
 }
 
-const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
-  currency: 'USD',
+const CURRENCY_FORMATTER = new Intl.NumberFormat('fr-SN', {
+  currency: 'XOF',
   style: 'currency',
-  minimumFractionDigits: 2,
 })
 
 export function formatCurrency(amount: number | string | null) {

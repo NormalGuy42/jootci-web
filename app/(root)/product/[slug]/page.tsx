@@ -1,3 +1,4 @@
+'use server'
 import { notFound } from 'next/navigation'
 import { getProductBySlug } from '../../../../lib/actions/product.actions'
 import ProductImages from '../../../../components/shared/product/product-images'
@@ -27,12 +28,12 @@ export async function generateMetadata({
   }
 }
 
-const ProductDetails = async ({
+export default  async function ProductDetail ({
   params: { slug },
 }: {
   params: { slug: string }
   searchParams: { page: string; color: string; size: string }
-}) => {
+}) {
   
   const product = await getProductBySlug(slug)
 
@@ -109,5 +110,3 @@ const ProductDetails = async ({
     </>
   )
 }
-
-export default ProductDetails

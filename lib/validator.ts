@@ -1,5 +1,8 @@
 import * as z from 'zod'
 import { formatNumberWithDecimal } from './utils'
+import { PAYMENT_METHODS } from './constants'
+import { createInsertSchema } from 'drizzle-zod'
+import { orderItems, orders } from './schema'
 
 
 // USER
@@ -20,15 +23,7 @@ export const signUpFormSchema = z.object({
   path: ['confirmPassword']
 })
 
-export const shippingAddressSchema = z.object({
-  fullName: z.string().min(3, 'Name must be at least 3 characters'),
-  streetAddress: z.string().min(3, 'Address must be at least 3 characters'),
-  city: z.string().min(3, 'city must be at least 3 characters'),
-  postalCode: z.string().min(3, 'Postal code must be at least 3 characters'),
-  country: z.string().min(3, 'Country must be at least 3 characters'),
-  lat: z.number().optional(),
-  lng: z.number().optional(),
-})
+
 
 // CART
 export const cartItemSchema = z.object({
@@ -44,3 +39,45 @@ export const cartItemSchema = z.object({
       'Price must have exactly two decimal places (e.g., 49.99)'
     ),
 })
+
+export const shippingAddressSchema = z.object({
+  fullName: z.string().min(3, 'Name must be at least 3 characters'),
+  streetAddress: z.string().min(3, 'Address must be at least 3 characters'),
+  city: z.string().min(3, 'city must be at least 3 characters'),
+  postalCode: z.string().min(3, 'Postal code must be at least 3 characters'),
+  country: z.string().min(3, 'Country must be at least 3 characters'),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
+})
+
+export const paymentMethodSchema = z
+  .object({
+    type: z.string().min(1, 'Payment method is required'),
+  })
+  .refine((data) => PAYMENT_METHODS.includes(data.type), {
+    path: ['type'],
+    message: 'Invalid payment method',
+  })
+
+  export const paymentResultSchema = z.object({
+    id: z.string(),
+    status: z.string(),
+    email_address: z.string(),
+    pricePaid: z.string(),
+  })
+
+  export const insertOrderSchema = createInsertSchema(orders, {
+    shippingAddress: shippingAddressSchema,
+    paymentResult: z
+      .object({
+        id: z.string(),
+        status: z.string(),
+        email_address: z.string(),
+        pricePaid: z.string(),
+      })
+      .optional(),
+  })
+
+  export const insertOrderItemSchema = createInsertSchema(orderItems, {
+    price: z.number(),
+  })

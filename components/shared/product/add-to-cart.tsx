@@ -4,7 +4,7 @@ import { ToastAction } from '@radix-ui/react-toast'
 import { Loader, Minus, Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
-import { addItemToCart } from '../../../lib/actions/cart.actions'
+import { addItemToCart, removeItemFromCart  } from '../../../lib/actions/cart.actions'
 import { Cart, CartItem } from '../../../types/customTypes'
 import { Button } from '../../ui/button'
 import { useToast } from '../../ui/use-toast'
@@ -102,8 +102,4 @@ export default function AddToCart({
       Add to cart
     </Button>
   )
-}
-
-export const removeItemFromCart = async (productId: string) => {
-    return { success: true, message: `${productId} removed` }
 }

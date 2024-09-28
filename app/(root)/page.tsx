@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import BlogCard from "../../components/cards/BlogCard";
 import CategoryCard from "../../components/cards/CategoryCard";

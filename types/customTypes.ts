@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { cartItemSchema, shippingAddressSchema } from "../lib/validator";
+import { cartItemSchema, paymentResultSchema, shippingAddressSchema } from "../lib/validator";
 
 
 import { InferSelectModel } from 'drizzle-orm'
-import { carts, products } from "../lib/schema";
+import { carts, orderItems, orders, products } from "../lib/schema";
 
 // PRODUCTS
 export type Product = InferSelectModel<typeof products>
@@ -33,3 +33,11 @@ export type BlogCardData = {
 }
 
 export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
+export type PaymentResult = z.infer<typeof paymentResultSchema>;
+
+// ORDERS
+export type Order = InferSelectModel<typeof orders> & {
+    orderItems: OrderItem[]
+    user: { name: string; email: string }
+  }
+  export type OrderItem = InferSelectModel<typeof orderItems>

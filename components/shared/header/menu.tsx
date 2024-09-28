@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function Menu(){
     const [showMenu,setShowMenu] = useState(false);
-    const menuRef = useRef<HTMLUListElement | null>(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
     
     const collapseMenu = ()=>{
         setShowMenu(!showMenu)
@@ -13,7 +13,7 @@ export function Menu(){
     
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node) ) {
               setShowMenu(false); // Hide nav if clicking outside
               console.log("click outside")
             }
@@ -26,9 +26,9 @@ export function Menu(){
           };
     }, []);
     return(
-        <div>
+        <div ref={menuRef}>
 
-            <ul className={showMenu? "flex justify-between gap-8 mobile-menu menu-show border-b border-gray-400" : "flex justify-between gap-8 mobile-menu"} ref={menuRef}>
+            <ul className={showMenu? "flex justify-between gap-8 mobile-menu menu-show border-b border-gray-400" : "flex justify-between gap-8 mobile-menu"}>
                 <li><a href="/">Accueil</a></li>
                 <li><a href="/shop">Shop</a></li>
                 <li><a href="/about">A propos</a></li>

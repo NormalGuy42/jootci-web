@@ -46,7 +46,7 @@ const Newsletter = () => {
 const Footer = () => {
   return (
     <div className="pt-32 footer">
-      <Newsletter/>
+      {/* <Newsletter/> */}
       <div className="bg-dark-green py-8">
         <div className="main-section flex justify-between footer-section">
           <div>

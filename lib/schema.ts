@@ -11,7 +11,67 @@ import{
     uuid,
 } from 'drizzle-orm/pg-core';
 import { AdapterAccountType } from 'next-auth/adapters';
-import { CartItem, ShippingAddress } from '../types/customTypes';
+import { CartItem, PaymentResult, ShippingAddress } from '../types/customTypes';
+import { relations } from 'drizzle-orm';
+
+
+// ORDERS
+export const orders = pgTable('order', {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    shippingAddress: json('shippingAddress').$type<ShippingAddress>().notNull(),
+    paymentMethod: text('paymentMethod').notNull(),
+    paymentResult: json('paymentResult').$type<PaymentResult>(),
+    itemsPrice: numeric('itemsPrice', { precision: 12, scale: 2 }).notNull(),
+    shippingPrice: numeric('shippingPrice', {
+      precision: 12,
+      scale: 2,
+    }).notNull(),
+    taxPrice: numeric('taxPrice', { precision: 12, scale: 2 }).notNull(),
+    totalPrice: numeric('totalPrice', { precision: 12, scale: 2 }).notNull(),
+    isPaid: boolean('isPaid').notNull().default(false),
+    paidAt: timestamp('paidAt'),
+    isDelivered: boolean('isDelivered').notNull().default(false),
+    deliveredAt: timestamp('deliveredAt'),
+    createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+    orderItems: many(orderItems),
+    user: one(users, { fields: [orders.userId], references: [users.id] }),
+  }))
+
+export const orderItems = pgTable(
+    'orderItems',   
+    {
+        orderId: uuid('orderId')
+        .notNull()
+        .references(() => orders.id, { onDelete: 'cascade' }),
+        productId: uuid('productId')
+        .notNull()
+        .references(() => products.id, { onDelete: 'cascade' }),
+        qty: integer('qty').notNull(),
+        price: numeric('price', { precision: 12, scale: 2 }).notNull(),
+        name: text('name').notNull(),
+        slug: text('slug').notNull(),
+        image: text('image').notNull(),
+    },
+    (orderItem) => ({
+        compoundKey: primaryKey({
+        columns: [orderItem.orderId, orderItem.productId],
+        }),
+    })
+)
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
+}),
+}))
+
 
 //PRODUCTS
 
@@ -45,13 +105,14 @@ export const users = pgTable("user", {
     id: uuid("id")
         .primaryKey()
         .$defaultFn(() => crypto.randomUUID()),
-    name: text("name"),
-    email: text("email").unique(),
+    name: text("name").notNull(),
+    email: text("email").unique().notNull(),
     emailVerified: timestamp("emailVerified", { mode: "date" }),
     role: text('role').notNull().default('user'),
     password: text('password'),
     image: text("image"),
     address: json('address').$type<ShippingAddress>(),
+    paymentMethod: text('paymentMethod'),
 })
 
 export const accounts = pgTable(

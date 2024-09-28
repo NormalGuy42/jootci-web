@@ -1,4 +1,4 @@
-'use server'
+// 'use server'
 
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { compareSync } from 'bcrypt-ts-edge'

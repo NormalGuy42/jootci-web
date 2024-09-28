@@ -28,6 +28,9 @@
 .main-green-text{
   color: var(--main-green);
 }
+.main-green-fill{
+  fill: var(--main-green);
+}
 /* *{
   box-shadow: 0 0 0 2px red;
 } */
