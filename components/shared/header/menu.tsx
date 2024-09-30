@@ -15,7 +15,6 @@ export function Menu(){
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node) ) {
               setShowMenu(false); // Hide nav if clicking outside
-              console.log("click outside")
             }
           };
       
