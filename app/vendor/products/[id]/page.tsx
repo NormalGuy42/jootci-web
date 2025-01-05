@@ -15,11 +15,20 @@ export default async function UpdateProductPage({
   }
 }) {
   const product = await getProductById(id)
+  
   if (!product) notFound()
+
+  const productData = {
+    allowedProductId: product.id,
+    price: Number(product.price),
+    stock: product.stock!,
+    description: product.description,
+  }
+  
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       <h1 className="h2-bold">Update Product</h1>
-      <ProductForm type="Update" product={product} productId={product.id} />
+      <ProductForm type="Update" product={productData} productId={product.id} />
     </div>
   )
 }
