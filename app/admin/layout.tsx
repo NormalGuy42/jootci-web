@@ -47,6 +47,8 @@ export default async function AdminLayout({
   ]
   
   return (
-    <UserPageLayout links={links} children={children}/>
+    <UserPageLayout links={links}>
+      {children}
+    </UserPageLayout>
   )
 }

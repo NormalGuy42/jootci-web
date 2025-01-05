@@ -36,6 +36,8 @@ export const metadata = {
     ]
 
     return (
-      <UserPageLayout links={links} children={children}/>
+      <UserPageLayout links={links}>
+        {children}
+      </UserPageLayout>
     )
   }

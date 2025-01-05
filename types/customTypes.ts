@@ -24,7 +24,18 @@ export type Review = InferSelectModel<typeof reviews> & {
   
 // CART
 export type CartItem = z.infer<typeof cartItemSchema>
-export type Cart = InferSelectModel<typeof carts>
+// export type Cart = InferSelectModel<typeof carts>
+export type Cart = {
+    id: string
+    userId: string | null
+    createdAt: Date
+    itemsPrice: string
+    shippingPrice: string
+    taxPrice: string
+    totalPrice: string
+    sessionCartId: string
+    items: CartItem[]
+}
 
 export type ProductCardData = {
     name: string,
