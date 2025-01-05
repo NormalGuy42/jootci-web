@@ -87,7 +87,7 @@ export const metadata = {
                           <span className="px-2">{item.qty}</span>
                         </TableCell>
                         <TableCell className="text-right">
-                          ${item.price}
+                          FCFA {item.price}
                         </TableCell>
                       </TableRow>
                     ))}

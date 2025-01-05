@@ -27,9 +27,19 @@ const calcPrice = (items: CartItem[]) => {
 
   export const addItemToCart = async (data: CartItem) => {
     try {
+
+      const session = await auth()
+      if (!session) {
+        throw new Error('Please sign in to add items to cart')
+      }
+
+      // Check if user is admin or vendor
+      if (session.user.role === 'admin' || session.user.role === 'vendor') {
+        throw new Error('Admins and vendors cannot add items to cart')
+      }
+
       const sessionCartId = cookies().get('sessionCartId')?.value
       if (!sessionCartId) throw new Error('Cart Session not found')
-      const session = await auth()
       const userId = session?.user.id as string | undefined
       const cart = await getMyCart()
       const item = cartItemSchema.parse(data)
@@ -81,6 +91,30 @@ const calcPrice = (items: CartItem[]) => {
     }
   }
   
+
+  export async function handleCartSession(userId: string) {
+    const sessionCartId = cookies().get('sessionCartId')?.value
+    if (!sessionCartId) throw new Error('Session Cart Not Found')
+    
+    const sessionCartExists = await db.query.carts.findFirst({
+      where: eq(carts.sessionCartId, sessionCartId),
+    })
+    
+    if (sessionCartExists && !sessionCartExists.userId) {
+      const userCartExists = await db.query.carts.findFirst({
+        where: eq(carts.userId, userId),
+      })
+      
+      if (userCartExists) {
+        cookies().set('beforeSigninSessionCartId', sessionCartId)
+        cookies().set('sessionCartId', userCartExists.sessionCartId)
+      } else {
+        await db.update(carts)
+          .set({ userId: userId })
+          .where(eq(carts.id, sessionCartExists.id))
+      }
+    }
+  }
 export async function getMyCart() {
     const sessionCartId = cookies().get('sessionCartId')?.value
     if (!sessionCartId) return undefined
@@ -131,3 +165,4 @@ export async function getMyCart() {
       return { success: false, message: formatError(error) }
   }
 }
+

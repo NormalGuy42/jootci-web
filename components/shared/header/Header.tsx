@@ -1,12 +1,8 @@
-// "use client";
-
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
-import { Button } from "../../ui/button";
-import { SignOut } from "../../../lib/actions/user.actions";
 import CartButton from "./cart-button";
 import UserButton from "./user-button";
 import { Menu } from "./menu";
+
 
 export function AccountIcon(){
     return(
@@ -19,14 +15,6 @@ export function AccountIcon(){
                     <p>Compte</p>
                 </div>
             </Link>
-            {/* <form action={SignOut} className="w-full">
-              <Button
-                className="w-full py-4 px-2 h-4 justify-start"
-                variant="ghost"
-              >
-                Sign Out
-              </Button>
-            </form> */}
         </div>
         
     )
@@ -46,25 +34,28 @@ export function BagIcon(){
 
 
 
-export default function Header(){
+export default async function Header(){
     
     return(
-        <header className="header w-full h-24 border-b border-gray-400">
-            <div className="flex justify-between h-full">
-                <div className="flex gap-2">
+        <header className="header w-full border-b border-gray-400">
+            <div className={"flex justify-between header_container"}>
+                <div className="flex gap-2 pl-4">
                     <div className="logo w-20 flex items-center">
                         <Link href='/'>
-                            <img src="/images/appIcon.png" alt="" />
+                            <img src="/images/appIcon.png" alt="" height={80} width={80}/>
                         </Link>
                     </div>
 
                     <nav className={"flex items-center"}>
                         <ul className={"flex justify-between gap-8 desktop-menu"}>
                             <li><a href="/">Accueil</a></li>
-                            <li><a href="/shop">Shop</a></li>
+                            <li><a href="/search">Shop</a></li>
                             <li><a href="/about">A propos</a></li>
                             <li><a href="/contact">Contact</a></li>
                         </ul>
+                        {/* <div className="hidden md:block">
+                            <Search />
+                        </div> */}
                         <Menu/>
                     </nav>
                 </div>
@@ -73,6 +64,10 @@ export default function Header(){
                     <UserButton />
                 </div>
             </div>
-        </header>
+            {/* <div className="md:hidden block   px-5 pb-2">
+                <Search />
+            </div> */}
+        </header>    
+        
     )
 }

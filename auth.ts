@@ -1,18 +1,35 @@
-// 'use server'
-
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { compareSync } from 'bcrypt-ts-edge'
 import { eq } from 'drizzle-orm'
 import type { NextAuthConfig } from 'next-auth'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import Resend from 'next-auth/providers/resend'
-import Google from 'next-auth/providers/google'
 
-import db from './lib/drizzle'
-import { carts, users } from './lib/schema'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { carts, users } from './lib/schema'
+import db from './lib/db'
+
+declare module '@auth/core/adapters' {
+  interface AdapterUser {
+    role: string
+  }
+}
+
+declare module 'next-auth' {
+  interface User {
+    role: string
+  }
+  
+  interface Session {
+    user: {
+      id: string
+      name: string
+      email: string
+      role: string
+    }
+  }
+}
 
 export const config = {
   pages: {
@@ -59,6 +76,17 @@ export const config = {
   callbacks: {
     jwt: async ({ token, user, trigger, session }: any) => {
       if (user) {
+        if (user.name === 'NO_NAME') {
+          token.name = user.email!.split('@')[0]
+          await db
+            .update(users)
+            .set({
+              name: token.name,
+            })
+            .where(eq(users.id, user.id))
+        }
+
+        token.role = user.role
         if (trigger === 'signIn' || trigger === 'signUp') {
           const sessionCartId = cookies().get('sessionCartId')?.value
           if (!sessionCartId) throw new Error('Session Cart Not Found')
@@ -80,13 +108,16 @@ export const config = {
           }
         }
       }
+
       if (session?.user.name && trigger === 'update') {
         token.name = session.user.name
       }
+
       return token
     },
     session: async ({ session, user, trigger, token }: any) => {
       session.user.id = token.sub
+      session.user.role = token.role
       if (trigger === 'update') {
         session.user.name = user.name
       }
@@ -94,16 +125,61 @@ export const config = {
     },
     authorized({ request, auth }: any) {
       const protectedPaths = [
-        /\/shipping-address/,
-        /\/payment-method/,
-        /\/place-order/,
-        /\/profile/,
-        /\/user\/(.*)/,
-        /\/order\/(.*)/,
-        /\/admin/,
+        '/shipping-address',
+        '/payment-method',
+        '/place-order',
+        '/profile',
+        '/orders',
+        '/user',
       ]
       const { pathname } = request.nextUrl
-      if (!auth && protectedPaths.some((p) => p.test(pathname))) return false
+
+     // Check if path requires authentication
+     const requiresAuth = protectedPaths.some(path => pathname.startsWith(path))
+
+     // If not logged in and trying to access any protected path (including admin/vendor)
+     if (!auth?.user && (requiresAuth || pathname.startsWith('/admin') || pathname.startsWith('/vendor'))) {
+       return false // This will redirect to sign-in
+     }
+
+     // If logged in, check role-based access
+     if (auth?.user) {
+       // Admin route protection
+       if (pathname.startsWith('/admin') && auth.user.role !== 'admin') {
+         return Response.redirect(new URL('/unauthorized', request.url))
+       }
+
+       // Vendor route protection
+       if (pathname.startsWith('/vendor') && auth.user.role !== 'vendor') {
+         return Response.redirect(new URL('/unauthorized', request.url))
+       }
+     }
+      // Admin route protection
+      // if (pathname.startsWith('/admin')) {
+      //   // If not logged in or not an admin
+      //   if (!userRole || userRole !== 'admin') {
+      //     // If logged in but wrong role, go to unauthorized
+      //     if (userRole) {
+      //       return NextResponse.redirect(new URL('/unauthorized', request.url))
+      //     }
+      //     // If not logged in, go to sign in
+      //     return NextResponse.redirect(new URL('/sign-in', request.url))
+      //   }
+      // }
+
+      // // Vendor route protection
+      // if (pathname.startsWith('/vendor')) {
+      //   // If not logged in or not a vendor
+      //   if (!userRole || userRole !== 'vendor') {
+      //     // If logged in but wrong role, go to unauthorized
+      //     if (userRole) {
+      //       return NextResponse.redirect(new URL('/unauthorized', request.url))
+      //     }
+      //     // If not logged in, go to sign in
+      //     return NextResponse.redirect(new URL('/sign-in', request.url))
+      //   }
+      // }
+      
       if (!request.cookies.get('sessionCartId')) {
         const sessionCartId = crypto.randomUUID()
         const newRequestHeaders = new Headers(request.headers)
@@ -121,3 +197,4 @@ export const config = {
   },
 } satisfies NextAuthConfig
 export const { handlers, auth, signIn, signOut } = NextAuth(config)
+

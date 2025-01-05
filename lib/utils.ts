@@ -8,7 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 export function formatId(id: string) {
   return `..${id.substring(id.length - 6)}`
 }
+export function capitalize(word: string){
+  return word.charAt(0).toUpperCase() + word.slice(1)
 
+}
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: 'short', // abbreviated month name (e.g., 'Oct')

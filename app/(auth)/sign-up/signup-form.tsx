@@ -9,6 +9,7 @@ import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { signUp } from '../../../lib/actions/user.actions'
 import { signUpDefaultValues } from '../../../lib/constants'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 
 export default function SignUpForm() {
   const [data, action] = useFormState(signUp, {
@@ -20,6 +21,7 @@ export default function SignUpForm() {
 
   const SignUpButton = () => {
     const { pending } = useFormStatus()
+
     return (
       <Button disabled={pending} className="w-full" variant="default">
         {pending ? 'Submitting...' : 'Sign Up'}
@@ -52,6 +54,18 @@ export default function SignUpForm() {
             type="email"
             defaultValue={signUpDefaultValues.email}
           />
+        </div>
+        <div>
+          <Label htmlFor="role">Type de compte</Label>
+          <Select name='role'>
+            <SelectTrigger>
+              <SelectValue placeholder="Choissisez le type de compte"/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="user">Utilisateur</SelectItem>
+              <SelectItem value="vendor">Vendeur</SelectItem>
+            </SelectContent>
+        </Select>
         </div>
         <div>
           <Label htmlFor="password">Password</Label>

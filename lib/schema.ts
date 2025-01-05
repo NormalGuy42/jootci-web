@@ -21,6 +21,9 @@ export const orders = pgTable('order', {
     userId: uuid('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+    vendorID: uuid('vendorID')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
     shippingAddress: json('shippingAddress').$type<ShippingAddress>().notNull(),
     paymentMethod: text('paymentMethod').notNull(),
     paymentResult: json('paymentResult').$type<PaymentResult>(),
@@ -35,6 +38,8 @@ export const orders = pgTable('order', {
     paidAt: timestamp('paidAt'),
     isDelivered: boolean('isDelivered').notNull().default(false),
     deliveredAt: timestamp('deliveredAt'),
+    orderStatus: text('orderStatus').notNull(),
+    estimatedArrival: timestamp('estimatedArrival'),
     createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
@@ -72,8 +77,33 @@ order: one(orders, {
 }),
 }))
 
+//CATEGORIES
+
+export const categories = pgTable(
+  'category',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    name: text('name').notNull(),
+    slug: text('slug').notNull(),
+    image: text('image').notNull(), 
+    description: text('description').notNull(),   
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+  }
+)
 
 //PRODUCTS
+
+export const allowedProducts = pgTable(
+  'allowedProducts',
+  {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    name: text('name').notNull(),
+    category: text('category').notNull(),
+    images: text('images').array(),
+    stockType: text('stockType'),
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+  }
+)
 
 export const products = pgTable(
     'product',
@@ -83,7 +113,7 @@ export const products = pgTable(
         slug: text('slug').notNull(),
         category: text('category').notNull(),
         images: text('images').array(),
-        description: text('description'),
+        description: text('description').notNull(),
         stock: integer('stock'),
         stockType: text('stockType'),
         price: numeric('price', { precision: 12, scale: 2}).default('0') ,
@@ -99,6 +129,34 @@ export const products = pgTable(
     }
 )
 
+export const reviews = pgTable('reviews', {
+    id: uuid('id').defaultRandom().primaryKey().notNull(),
+    userId: uuid('userId')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    productId: uuid('productId')
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    rating: integer('rating').notNull(),
+    title: text('title').notNull(),
+    description: text('slug').notNull(),
+    isVerifiedPurchase: boolean('isVerifiedPurchase').notNull().default(true),
+    createdAt: timestamp('createdAt').notNull().defaultNow(),
+  })
+  
+  export const productRelations = relations(products, ({ many }) => ({
+    reviews: many(reviews),
+  }))
+
+
+  export const reviewsRelations = relations(reviews, ({ one }) => ({
+    user: one(users, { fields: [reviews.userId], references: [users.id] }),
+    product: one(products, {
+      fields: [reviews.productId],
+      references: [products.id],
+    }),
+  }))
+
 // USERS
 
 export const users = pgTable("user", {
@@ -113,7 +171,16 @@ export const users = pgTable("user", {
     image: text("image"),
     address: json('address').$type<ShippingAddress>(),
     paymentMethod: text('paymentMethod'),
-})
+    createdAt: timestamp('createdAt').defaultNow(),
+    },
+    (table) => {
+        return {
+          userEmailIdx: uniqueIndex('user_email_idx').on(table.email),
+        }
+      }
+)
+
+
 
 export const accounts = pgTable(
     "account",
@@ -162,26 +229,26 @@ export const verificationTokens = pgTable(
     })
 )
 
-export const authenticators = pgTable(
-    "authenticator",
-    {
-        credentialID: text("credentialID").notNull().unique(),
-        userId: uuid("userId")
-        .notNull()
-        .references(() => users.id, { onDelete: "cascade" }),
-        providerAccountId: text("providerAccountId").notNull(),
-        credentialPublicKey: text("credentialPublicKey").notNull(),
-        counter: integer("counter").notNull(),
-        credentialDeviceType: text("credentialDeviceType").notNull(),
-        credentialBackedUp: boolean("credentialBackedUp").notNull(),
-        transports: text("transports"),
-    },
-(authenticator) => ({
-    compositePK: primaryKey({
-    columns: [authenticator.userId, authenticator.credentialID],
-    }),
-})
-)
+// export const authenticators = pgTable(
+//     "authenticator",
+//     {
+//         credentialID: text("credentialID").notNull().unique(),
+//         userId: uuid("userId")
+//         .notNull()
+//         .references(() => users.id, { onDelete: "cascade" }),
+//         providerAccountId: text("providerAccountId").notNull(),
+//         credentialPublicKey: text("credentialPublicKey").notNull(),
+//         counter: integer("counter").notNull(),
+//         credentialDeviceType: text("credentialDeviceType").notNull(),
+//         credentialBackedUp: boolean("credentialBackedUp").notNull(),
+//         transports: text("transports"),
+//     },
+// (authenticator) => ({
+//     compositePK: primaryKey({
+//     columns: [users.id, authenticator.credentialID],
+//     }),
+// })
+// )
 
 // CARTS
 export const carts = pgTable('cart', {

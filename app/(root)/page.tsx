@@ -1,9 +1,13 @@
-"use client";
+// "use client";
 
+import Link from "next/link";
 import BlogCard from "../../components/cards/BlogCard";
 import CategoryCard from "../../components/cards/CategoryCard";
 import ProductCard from "../../components/cards/ProductCard";
-import { BlogCardData, CategoryCardData, ProductCardData } from "../../types/customTypes"
+import ProductList from "../../components/shared/product/product-list";
+import { getAllProductCategories, getLatestProducts } from "../../lib/actions/product.actions";
+import { BlogCardData, Category, CategoryCardData, ProductCardData } from "../../types/customTypes"
+import { getAllCategories, getCategories } from "../../lib/actions/category.action";
 
 const BlogSection = () =>{
   
@@ -116,19 +120,13 @@ const BannerSection = () => {
   )
 }
 
-const OurCategories = () => {
-  const categories : Array<CategoryCardData> = [
-    {'title': 'Fruits', 'imagePath': '/images/icons/fruit-images.avif','url':''},
-    {'title': 'Legumes', 'imagePath': '/images/icons/vegetables-images.avif','url':''},
-    {'title': 'Lait', 'imagePath': '/images/icons/dairy-images.webp','url':''},
-    {'title': 'Boeuf', 'imagePath': '/images/icons/steak-images.avif','url':''},
+const OurCategories = ({ categories }: {categories: Array<Category>}) => {
 
-  ]
   return(
-    <div className="main-section pt-32">
+    <div className="main-section">
       <h1 className="title text-center p-8">Nos Categories</h1>
       <div className="grid grid-cols-4 items-center justify-between category-section">
-        {categories.map((category:CategoryCardData,index)=><CategoryCard key={index}  title={category.title} imagePath={category.imagePath} url={category.url} />)}
+        {categories.map((category:Category,index)=><CategoryCard key={index}  title={category.name} imagePath={category.image} url={category.slug} />)}
       </div>
     </div>
   )
@@ -165,7 +163,9 @@ const HeroSection = () => {
       <div className="tagline absolute top-1/3 ">
         <div className="">
           <h1 className="main-title">Produits sains et organiques</h1>
-          <button className="main-btn">Achetez maintenant</button>
+          <Link href="/shop">
+            <button className="main-btn">Achetez maintenant</button>
+          </Link>
         </div>
       </div>
       </div>
@@ -175,21 +175,28 @@ const HeroSection = () => {
 
 
 
-export default function Home() {
+export default async function Home() {
+
+  const latestProducts = await getLatestProducts()
+  const categories = await getCategories()
 
   return (
     <div>
       <HeroSection/>
-      <FeatureSection/>
 
-      <OurProducts/>
-      <OurCategories/>
+      <OurCategories categories={categories}/>
+
+      <div className="space-y-8">
+        <h1 className="title text-center p-8">Nouveautes</h1>
+        <ProductList data={latestProducts} />
+      </div>
+
       <BannerSection/>
       
       <FewReasons/>
       
-      <FillerSection/>
-      <BlogSection/>
+      {/* <FillerSection/> */}
+      {/* <BlogSection/> */}
     </div>
   );
 }

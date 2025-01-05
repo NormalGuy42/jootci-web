@@ -8,6 +8,7 @@ import {
   shippingAddressSchema,
     signInFormSchema,
     signUpFormSchema,
+    updateUserSchema,
   } from '../validator'
 import { hashSync } from 'bcrypt-ts-edge'
 import db from '../db'
@@ -15,8 +16,9 @@ import { users } from '../schema'
 import { formatError } from '../utils'
 import { revalidatePath } from 'next/cache'
 import { ShippingAddress } from '../../types/customTypes'
-import { eq } from 'drizzle-orm'
+import { count, desc, eq } from 'drizzle-orm'
 import { z } from 'zod'
+
 
 export async function signUp(prevState: unknown, formData: FormData){
   
@@ -24,6 +26,7 @@ export async function signUp(prevState: unknown, formData: FormData){
     const user = signUpFormSchema.parse({
       name: formData.get('name'),
       email: formData.get('email'),
+      role: formData.get('role'),
       confirmPassword: formData.get('confirmPassword'),
       password: formData.get('password'),
     })
@@ -78,6 +81,30 @@ export async function signInWithCredentials(
     await signOut()
   }
   
+  
+//GET
+
+export async function getAllUsers({
+  limit = 20,
+  page,
+}: {
+  limit?: number
+  page: number
+}) {
+  const data = await db.query.users.findMany({
+    orderBy: [desc(users.createdAt)],
+    limit,
+    offset: (page - 1) * limit,
+  })
+  const dataCount = await db.select({ count: count() }).from(users)
+  return {
+    data,
+    totalPages: Math.ceil(dataCount[0].count / limit),
+  }
+}
+
+
+
   export async function getUserById(userId: string) {
     const user = await db.query.users.findFirst({
       where: (users, { eq }) => eq(users.id, userId),
@@ -85,6 +112,40 @@ export async function signInWithCredentials(
     if (!user) throw new Error('User not found')
     return user
   }
+
+  // DELETE
+export async function deleteUser(id: string) {
+  try {
+    await db.delete(users).where(eq(users.id, id))
+    revalidatePath('/admin/users')
+    return {
+      success: true,
+      message: 'User deleted successfully',
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}
+// UPDATE
+
+export async function updateUser(user: z.infer<typeof updateUserSchema>) {
+  try {
+    await db
+      .update(users)
+      .set({
+        name: user.name,
+        role: user.role,
+      })
+      .where(eq(users.id, user.id))
+    revalidatePath('/admin/users')
+    return {
+      success: true,
+      message: 'User updated successfully',
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}
 
   export async function updateUserPaymentMethod(
     data: z.infer<typeof paymentMethodSchema>
@@ -101,6 +162,28 @@ export async function signInWithCredentials(
         .set({ paymentMethod: paymentMethod.type })
         .where(eq(users.id, currentUser.id))
       revalidatePath('/place-order')
+      return {
+        success: true,
+        message: 'User updated successfully',
+      }
+    } catch (error) {
+      return { success: false, message: formatError(error) }
+    }
+  }
+  
+  export async function updateProfile(user: { name: string; email: string }) {
+    try {
+      const session = await auth()
+      const currentUser = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, session?.user.id!),
+      })
+      if (!currentUser) throw new Error('User not found')
+      await db
+        .update(users)
+        .set({
+          name: user.name,
+        })
+        .where(eq(users.id, currentUser.id))
       return {
         success: true,
         message: 'User updated successfully',

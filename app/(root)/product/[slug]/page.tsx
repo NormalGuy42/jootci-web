@@ -9,6 +9,8 @@ import { Card, CardContent } from '../../../../components/ui/card'
 import AddToCart from '../../../../components/shared/product/add-to-cart'
 import { round2 } from '../../../../lib/utils'
 import { getMyCart } from '../../../../lib/actions/cart.actions'
+import ReviewList from './review-list'
+import { auth } from '../../../../auth'
 
 
 export async function generateMetadata({
@@ -38,7 +40,9 @@ export default  async function ProductDetail ({
   const product = await getProductBySlug(slug)
 
   if (!product) notFound()
- const cart = await getMyCart()
+  const cart = await getMyCart()
+  const session = await auth()
+
 
   return (
     <>
@@ -93,6 +97,7 @@ export default  async function ProductDetail ({
                     cart={cart}
                     item={{
                       productId: product.id,
+                      vendorID: product.vendorID,
                       name: product.name,
                       slug: product.slug,
                       price: round2(product.price!),
@@ -106,6 +111,14 @@ export default  async function ProductDetail ({
             </Card>
           </div>
         </div>
+      </section>
+      <section className="mt-10">
+        <h2 className="h2-bold  mb-5">Customer Reviews</h2>
+        <ReviewList
+          productId={product.id}
+          productSlug={product.slug}
+          userId={session?.user.id!}
+        />
       </section>
     </>
   )

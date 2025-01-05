@@ -1,6 +1,6 @@
 "use client"
 
-import { ToastProvider, Toast, ToastTitle, ToastDescription, ToastClose, ToastViewport } from "@radix-ui/react-toast"
+import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "./toast"
 import { useToast } from "./use-toast"
 
 

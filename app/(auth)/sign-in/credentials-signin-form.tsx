@@ -22,7 +22,7 @@ export default function CredentialsSignInForm() {
     const { pending } = useFormStatus()
     return (
       <Button disabled={pending} className="w-full" variant="default">
-        {pending ? 'Submitting...' : 'Sign In with credentials'}
+        {pending ? 'Submitting...' : 'Sign In'}
       </Button>
     )
   }

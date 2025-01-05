@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react";
+import { BurgerIcon } from "../../icons/Icons";
 
 export function Menu(){
     const [showMenu,setShowMenu] = useState(false);
@@ -33,11 +34,7 @@ export function Menu(){
                 <li><a href="/about">A propos</a></li>
                 <li><a href="/contact">Contact</a></li>
             </ul>
-            <div className="flex justify-center items-center pr-4 cursor-pointer burger-container">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="#16a34a" height={50} width={50} className="burger" onClick={collapseMenu}>
-                    <path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/>
-                </svg>
-            </div>
+            <BurgerIcon function={collapseMenu}/>
         </div>
     )
 }

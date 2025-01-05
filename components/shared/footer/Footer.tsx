@@ -45,7 +45,7 @@ const Newsletter = () => {
 
 const Footer = () => {
   return (
-    <div className="pt-32 footer">
+    <div className="footer"> {/*Previous padding was pt-32*/}
       {/* <Newsletter/> */}
       <div className="bg-dark-green py-8">
         <div className="main-section flex justify-between footer-section">

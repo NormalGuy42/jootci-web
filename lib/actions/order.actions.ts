@@ -1,10 +1,10 @@
 'use server'
 
-import { count, desc, eq, sql } from "drizzle-orm"
+import { count, desc, eq, sql, sum } from "drizzle-orm"
 import { isRedirectError } from "next/dist/client/components/redirect"
 import { redirect } from "next/navigation"
 import { auth } from "../../auth"
-import { orders, orderItems, carts, products } from "../schema"
+import { orders, orderItems, carts, products, users } from "../schema"
 import { formatError } from "../utils"
 import { getMyCart } from "./cart.actions"
 import { getUserById } from "./user.actions"
@@ -50,6 +50,59 @@ export async function getOrderById(orderId: string) {
       totalPages: Math.ceil(dataCount[0].count / limit),
     }
   }
+
+  export async function getOrderSummary() {
+    const ordersCount = await db.select({ count: count() }).from(orders)
+    const productsCount = await db.select({ count: count() }).from(products)
+    const usersCount = await db.select({ count: count() }).from(users)
+    const ordersPrice = await db
+      .select({ sum: sum(orders.totalPrice) })
+      .from(orders)
+    const salesData = await db
+      .select({
+        months: sql<string>`to_char(${orders.createdAt},'MM/YY')`,
+        totalSales: sql<number>`sum(${orders.totalPrice})`.mapWith(Number),
+      })
+      .from(orders)
+      .groupBy(sql`1`)
+    const latestOrders = await db.query.orders.findMany({
+      orderBy: [desc(orders.createdAt)],
+      with: {
+        user: { columns: { name: true } },
+      },
+      limit: 6,
+    })
+    return {
+      ordersCount,
+      productsCount,
+      usersCount,
+      ordersPrice,
+      salesData,
+      latestOrders,
+    }
+  }
+  
+
+  export async function getAllOrders({
+    limit = PAGE_SIZE,
+    page,
+  }: {
+    limit?: number
+    page: number
+  }) {
+    const data = await db.query.orders.findMany({
+      orderBy: [desc(products.createdAt)],
+      limit,
+      offset: (page - 1) * limit,
+      with: { user: { columns: { name: true } } },
+    })
+    const dataCount = await db.select({ count: count() }).from(orders)
+    return {
+      data,
+      totalPages: Math.ceil(dataCount[0].count / limit),
+    }
+  }
+
 // CREATE
 export const createOrder = async () => {
     try {
@@ -60,14 +113,25 @@ export const createOrder = async () => {
       if (!cart || cart.items.length === 0) redirect('/cart')
       if (!user.address) redirect('/shipping-address')
       if (!user.paymentMethod) redirect('/payment-method')
+      
+      // Get the vendor ID from the first item in cart
+      // Assuming all items in an order are from the same vendor
+
+      const firstItem = cart.items[0]
+      const orderVendorID = firstItem?.vendorID
+
+      if (!orderVendorID) throw new Error('Vendor ID not found')
+
       const order = insertOrderSchema.parse({
         userId: user.id,
+        vendorID: orderVendorID, 
         shippingAddress: user.address,
         paymentMethod: user.paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
+        orderStatus: 'Pending Acceptance',
       })
 
       const insertedOrderId = await db.transaction(async (tx) => {
@@ -97,6 +161,20 @@ export const createOrder = async () => {
       if (isRedirectError(error)) {
         throw error
       }
+      return { success: false, message: formatError(error) }
+    }
+  }
+
+  // DELETE
+  export async function deleteOrder(id: string) {
+    try {
+      await db.delete(orders).where(eq(orders.id, id))
+      revalidatePath('/admin/orders')
+      return {
+        success: true,
+        message: 'Order deleted successfully',
+      }
+    } catch (error) {
       return { success: false, message: formatError(error) }
     }
   }
@@ -201,4 +279,37 @@ export const createOrder = async () => {
             })
             .where(eq(orders.id, orderId))
         })
+
+    }
+
+    // Cash On Delivery Payment
+    export async function updateOrderToPaidByCOD(orderId: string) {
+      try {
+        await updateOrderToPaid({ orderId })
+        revalidatePath(`/order/${orderId}`)
+        return { success: true, message: 'Order paid successfully' }
+      } catch (err) {
+        return { success: false, message: formatError(err) }
+      }
+    }
+
+    export async function deliverOrder(orderId: string) {
+      try {
+        const order = await db.query.orders.findFirst({
+          where: eq(orders.id, orderId),
+        })
+        if (!order) throw new Error('Order not found')
+        if (!order.isPaid) throw new Error('Order is not paid')
+        await db
+          .update(orders)
+          .set({
+            isDelivered: true,
+            deliveredAt: new Date(),
+          })
+          .where(eq(orders.id, orderId))
+        revalidatePath(`/order/${orderId}`)
+        return { success: true, message: 'Order delivered successfully' }
+      } catch (err) {
+        return { success: false, message: formatError(err) }
+      }
     }

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -22,6 +22,9 @@
   --button-yellow: rgb(241 202 0);
 }
 
+.light-green-bg{
+  background-color: var(--light-green-text);
+}
 .main-green-bg{
   background-color: var(--main-green);
 }
@@ -48,6 +51,7 @@
     text-wrap: balance;
   }
 }
+
 
 @layer components{
   /*Titles*/
@@ -77,13 +81,17 @@
     @apply p-3 text-white font-semibold flex justify-center items-center rounded-lg text-lg;
     background-color: var(--button-yellow);
   }
+  .icon-btn{
+    @apply h-12 w-12 bg-white border border-black flex items-center justify-center;
+
+  }
 }
 *{
   box-sizing: border-box;
 }
 body {
   background-color: white;
-  font-family: "Manrope", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 
@@ -105,6 +113,11 @@ header{
 header li a:hover{
   color: var(--main-green);
 }
+
+.header_container{
+  height: 86px;
+}
+
 .burger-container{
   display: none;
 }
@@ -120,17 +133,17 @@ header li a:hover{
 
 /*Nav bar start*/
 .sidenav{
-  height: 100%;  
-  width: 25%;  
+  width: 20%;  
   min-width: 240px;
-  position: fixed; 
+  max-width: 280px;
+  min-height: 100vh;
   z-index: 1; 
   top: 0; 
   left: 0; 
   background-color:#232323; 
   transition: .5s ease; 
   overflow-x: hidden; 
-  padding-top: 120px; 
+  padding-top: 28px; 
   display: flex; 
   flex-direction: column; 
   align-items: center;
@@ -146,6 +159,21 @@ header li a:hover{
   display: flex;
   align-items: center;
   gap: 16px;
+  color: #ffffffb0;
+}
+.sidenav svg{
+  fill: #ffffffb0;
+  height: 32px;
+  width: 32px;
+}
+.sidenav li:hover svg{
+  fill: white;
+}
+a.active-sidenav-item{
+ color: white !important; 
+}
+.active-sidenav-item svg{
+  fill: white;
 }
 .nav-bar-item svg{
   fill: white;
@@ -175,13 +203,22 @@ header li a:hover{
   color: var(--light-green-text);
 }
 
-/* .filler-section{
-  background-image: url("/bg2.jpg");
-  background-size: cover;
-} */
+/*Buttons start*/
+.filterBtn svg{
+  height: 32px;
+  width: 32px;
+}
+.sort-options {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  padding: 16px;
+}
 
-
-
+/*Buttons end*/ 
 .footer{
   color: white;
 }
@@ -238,7 +275,7 @@ header li a:hover{
   }
 }
 
-@media (max-width:640px) {
+@media (max-width:780px) {
   .burger-container{
     display: block;
   }
@@ -264,9 +301,21 @@ header li a:hover{
   }
 
   .sidenav{
+    position: absolute;
+    width: 0 !important;
+    min-width: 0;
+  }
+  .show-sidenav{
+    width: 20%;
+    min-width: 240px;
+    transition: all .5s;
+  }
+
+  .remove-sidenav{
     width: 0;
     min-width: 0;
   }
+
   .sidenav-show{
     width: 25%;  
     min-width: 240px;

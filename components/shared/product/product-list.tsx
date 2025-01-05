@@ -1,11 +1,9 @@
 import { Product } from '../../../types/customTypes';
 import ProductCard from './product-card'
 
-const ProductList = ({ title, data }: { title: string; data: Product[] }) => {
+const ProductList = ({ data }: { data: Product[] }) => {
   return (
     <>
-      <h2 className="h2-bold">{title}</h2>
-
       {data.length > 0 ? (
         <div className="p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {data.map((product: Product) => (

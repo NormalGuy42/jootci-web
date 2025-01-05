@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 
 import { auth } from '../../../auth'
@@ -21,7 +22,7 @@ export default async function UserButton() {
           <div className="flex items-center">
             <Button
               variant="ghost"
-              className="relative w-8 h-8 rounded-full ml-2"
+              className="relative w-fit h-8 rounded-full ml-2"
             >
               {session.user.name}
             </Button>
@@ -39,30 +40,35 @@ export default async function UserButton() {
             </div>
           </DropdownMenuLabel>
 
-          {/* <DropdownMenuItem>
+          {session.user.role === 'admin' && (
+            <DropdownMenuItem>
+            <Link className="w-full" href="/admin/overview">
+              Admin
+            </Link>
+          </DropdownMenuItem>
+        )}
+        {session.user.role === 'vendor' && (
+            <DropdownMenuItem>
+            <Link className="w-full" href="/vendor/overview">
+              Dashboard
+            </Link>
+          </DropdownMenuItem>
+        )}
+        {session.user.role == 'user' &&(
+          <>
+            <DropdownMenuItem>
             <Link className="w-full" href="/user/profile">
               Profile
             </Link>
           </DropdownMenuItem>
-
           <DropdownMenuItem>
-            <Link className="w-full" href="/user/orders">
-              Order History
-            </Link>
-          </DropdownMenuItem>
-
-          {session.user.role === 'admin' && (
-            <DropdownMenuItem>
-              <Link className="w-full" href="/admin/overview">
-                Admin
-              </Link>
-            </DropdownMenuItem>
-          )} */}
-          <DropdownMenuItem>
-            <Link className="w-full" href="/user/orders">
-              Order History
-            </Link>
-          </DropdownMenuItem>
+          <Link className="w-full" href="/user/orders">
+            Order History
+          </Link>
+        </DropdownMenuItem>
+          </>
+        )}
+          
           <DropdownMenuItem className="p-0 mb-1">
             <form action={SignOut} className="w-full">
               <Button

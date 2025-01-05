@@ -3,11 +3,25 @@ import { cartItemSchema, paymentResultSchema, shippingAddressSchema } from "../l
 
 
 import { InferSelectModel } from 'drizzle-orm'
-import { carts, orderItems, orders, products } from "../lib/schema";
+import { allowedProducts, carts, categories, orderItems, orders, products, reviews } from "../lib/schema";
+
+
+// CATEGORIES
+export type Category = InferSelectModel<typeof categories>
 
 // PRODUCTS
 export type Product = InferSelectModel<typeof products>
-
+export type ProductFormData = {
+    allowedProductId?: string;
+    price: number;
+    stock: number;
+    description: string;
+}
+export type AllowedProduct = InferSelectModel<typeof allowedProducts>
+export type Review = InferSelectModel<typeof reviews> & {
+    user?: { name: string }
+  }
+  
 // CART
 export type CartItem = z.infer<typeof cartItemSchema>
 export type Cart = InferSelectModel<typeof carts>
@@ -41,3 +55,11 @@ export type Order = InferSelectModel<typeof orders> & {
     user: { name: string; email: string }
   }
   export type OrderItem = InferSelectModel<typeof orderItems>
+
+// Miscellanous types
+
+export type SideNavLink = {
+    title: string,
+    href: string,
+    icon: React.ReactNode,
+}

@@ -1,6 +1,5 @@
 'use client'
 
-import { ToastAction } from '@radix-ui/react-toast'
 import { Loader, Minus, Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
@@ -8,6 +7,8 @@ import { addItemToCart, removeItemFromCart  } from '../../../lib/actions/cart.ac
 import { Cart, CartItem } from '../../../types/customTypes'
 import { Button } from '../../ui/button'
 import { useToast } from '../../ui/use-toast'
+import { useSession } from 'next-auth/react'
+import { ToastAction } from '../../ui/toast'
 
 
 export default function AddToCart({
@@ -18,10 +19,29 @@ export default function AddToCart({
   item: Omit<CartItem, 'cartId'>
 }) {
   const router = useRouter()
+
+  const { data: session } = useSession()
   const { toast } = useToast()
+
+  // Check if user is admin or vendor
+  const isAdminOrVendor = session?.user?.role === 'admin' || session?.user?.role === 'vendor'
+
   const [isPending, startTransition] = useTransition()
   const existItem =
     cart && cart.items.find((x) => x.productId === item.productId)
+  // If user is admin or vendor, disable the button
+  if (isAdminOrVendor) {
+    return (
+      <Button
+        disabled
+        className="w-full"
+        title="Admins and vendors cannot add items to cart"
+      >
+        Unauthorized
+      </Button>
+    )
+  }
+
   return existItem ? (
     <div>
       <Button
@@ -87,7 +107,7 @@ export default function AddToCart({
             description: `${item.name} added to the cart`,
             action: (
               <ToastAction
-                className="bg-primary"
+                className="main-green-bg text-white hover:text-black"
                 onClick={() => router.push('/cart')}
                 altText="Go to cart"
               >
