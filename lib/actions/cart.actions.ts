@@ -91,6 +91,57 @@ const calcPrice = (items: CartItem[]) => {
     }
   }
   
+export const updateCartItemQuantity = async (data: CartItem) => {
+  try {
+    const session = await auth()
+    if (!session) {
+      throw new Error('Please sign in to update cart')
+    }
+
+    // Check if user is admin or vendor
+    if (session.user.role === 'admin' || session.user.role === 'vendor') {
+      throw new Error('Admins and vendors cannot add items to cart')
+    }
+
+    const sessionCartId = cookies().get('sessionCartId')?.value
+    if (!sessionCartId) throw new Error('Cart Session not found')
+
+    const cart = await getMyCart()
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, data.productId),
+    })
+
+    if (!product) throw new Error('Product not found')
+    if (!cart) throw new Error('Cart not found')
+
+    if (product.stock! < data.qty) {
+      throw new Error('Not enough stock')
+    }
+
+    // Update the quantity directly
+    cart.items = cart.items.map(item => 
+      item.productId === data.productId 
+        ? { ...item, qty: data.qty }
+        : item
+    )
+
+    await db
+      .update(carts)
+      .set({
+        items: cart.items,
+        ...calcPrice(cart.items),
+      })
+      .where(eq(carts.id, cart.id))
+
+    revalidatePath('/cart')
+    return {
+      success: true,
+      message: `${product.name} quantity updated successfully`,
+    }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}
 
   export async function handleCartSession(userId: string) {
     const sessionCartId = cookies().get('sessionCartId')?.value

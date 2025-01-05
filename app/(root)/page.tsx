@@ -197,6 +197,6 @@ export default async function Home() {
       
       {/* <FillerSection/> */}
       {/* <BlogSection/> */}
-    </div>
+   </div>
   );
 }

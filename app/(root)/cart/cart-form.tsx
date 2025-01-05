@@ -7,10 +7,12 @@ import { Loader, Minus, Plus, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useToast } from '../../../components/ui/use-toast'
-import { addItemToCart, removeItemFromCart } from '../../../lib/actions/cart.actions'
+import { addItemToCart, removeItemFromCart, updateCartItemQuantity } from '../../../lib/actions/cart.actions'
 import { Button } from '../../../components/ui/button'
 import { Cart } from '../../../types/customTypes'
 import { Input } from '../../../components/ui/input'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { formatCurrency } from '../../../lib/utils'
 
 interface CartFormProps {
   cart: Cart | undefined  // Update this line
@@ -40,28 +42,33 @@ export default function CartForm({ cart }: CartFormProps) {
     slug: string,
     image: string,
     price: number,
-    newQty: number
+    newQty: number,
+    vendorID: string
   ) => {
     if (newQty < 1) newQty = 1
     if (newQty > 99) newQty = 99
 
     startTransition(async () => {
-      const res = await addItemToCart({
+      // Remove the existing item first to avoid quantity issues
+      await removeItemFromCart(productId)
+      
+      const res = await updateCartItemQuantity({
         productId,
         name,
         slug,
         image,
         price,
-        qty: newQty,
-        vendorID: ''
+        qty: newQty, // This will be the exact quantity entered
+        vendorID
       })
+      
       if (!res.success) {
         toast({
           variant: 'destructive',
           description: res.message,
         })
       }
-      setEditingId(null) // Close input after update
+      setEditingId(null)
     })
   }
 
@@ -77,7 +84,8 @@ export default function CartForm({ cart }: CartFormProps) {
         item.slug,
         item.image,
         item.price,
-        value
+        value, // Pass the exact value entered
+        item.vendorID
       )
     }
     setEditingId(null)
@@ -96,7 +104,8 @@ export default function CartForm({ cart }: CartFormProps) {
           item.slug,
           item.image,
           item.price,
-          value
+          value, // Pass the exact value entered
+          item.vendorID
         )
       }
       setEditingId(null)
@@ -109,19 +118,19 @@ export default function CartForm({ cart }: CartFormProps) {
   return (
     <div className="grid md:grid-cols-4 md:gap-5">
       <div className="overflow-x-auto md:col-span-3">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table className="table">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Item</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {cart.items.map((item) => (
-              <tr key={item.productId}>
-                <td>
+              <TableRow key={item.productId}>
+                <TableCell>
                   <Link
                     href={`/product/${item.slug}`}
                     className="flex items-center"
@@ -135,8 +144,8 @@ export default function CartForm({ cart }: CartFormProps) {
                     />
                     <span className="px-2">{item.name}</span>
                   </Link>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center gap-2">
                     <Button
                       type="button"
@@ -210,9 +219,9 @@ export default function CartForm({ cart }: CartFormProps) {
                       )}
                     </Button>
                   </div>
-                </td>
-                <td>${item.price}</td>
-                <td>
+                </TableCell>
+                <TableCell>{formatCurrency(item.price)}</TableCell>
+                <TableCell>
                   <Button
                     variant="destructive"
                     size="icon"
@@ -235,19 +244,18 @@ export default function CartForm({ cart }: CartFormProps) {
                       <Trash2 className="h-4 w-4" />
                     )}
                   </Button>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
       <div>
         <div className="card p-5">
           <ul>
             <li>
               <div className="pb-3 text-xl">
-                Subtotal ({cart.items.reduce((a, c) => a + c.qty, 0)}) : $
-                {cart.itemsPrice}
+                Subtotal ({cart.items.reduce((a, c) => a + c.qty, 0)}) : {formatCurrency(cart.itemsPrice)}
               </div>
             </li>
             <li>
