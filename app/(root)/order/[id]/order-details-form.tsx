@@ -10,7 +10,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,  } from '../../../../components/ui/table'
 import { Card, CardContent } from '../../../../components/ui/card'
-import { formatId, formatDateTime, formatCurrency } from '../../../../lib/utils'
+import { formatId, formatDateTime, formatCurrency, formatPaymentMethodText } from '../../../../lib/utils'
 import { Order } from '../../../../types/customTypes'
 import { Badge } from '../../../../components/ui/badge'
 import { useToast } from '../../../../components/ui/use-toast'
@@ -119,8 +119,19 @@ export default function OrderDetailsForm({ order, paypalClientId, isVendor }: { 
         <div className="overflow-x-auto md:col-span-2 space-y-4">
           <Card>
             <CardContent className="p-4 gap-4">
+              <h2 className="text-xl pb-4">Order Status</h2>
+              <p>{formatPaymentMethodText(paymentMethod)}</p>
+              {isPaid ? (
+                <Badge variant="secondary">
+                  Paid at {formatDateTime(paidAt!).dateTime}
+                </Badge>
+              ) : (
+                <Badge variant="destructive">Not paid</Badge>
+              )}
+            </CardContent>
+            <CardContent className="p-4 gap-4">
               <h2 className="text-xl pb-4">Payment Method</h2>
-              <p>{paymentMethod}</p>
+              <p>{formatPaymentMethodText(paymentMethod)}</p>
               {isPaid ? (
                 <Badge variant="secondary">
                   Paid at {formatDateTime(paidAt!).dateTime}

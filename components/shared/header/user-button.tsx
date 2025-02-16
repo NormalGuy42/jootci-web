@@ -52,6 +52,9 @@ export default async function UserButton() {
             <Link className="w-full" href="/vendor/overview">
               Dashboard
             </Link>
+            <Link className="w-full" href="/vendor/orders">
+              Orders
+            </Link>
           </DropdownMenuItem>
         )}
         {session.user.role == 'user' &&(

@@ -131,7 +131,7 @@ export const createOrder = async () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-        orderStatus: 'Pending Acceptance',
+        orderStatus: 'pending',
       })
 
       const insertedOrderId = await db.transaction(async (tx) => {
@@ -180,6 +180,59 @@ export const createOrder = async () => {
   }
 
   // UPDATE
+  export const updateOrderStatus = async ({
+    orderId,
+    status
+  }: {
+    orderId: string
+    status: string
+  }) => {
+    try {
+      const session = await auth()
+      if (!session || session.user.role !== 'vendor') {
+        throw new Error('Unauthorized')
+      }
+  
+       // Get the current order with vendor ID
+      const order = await db.query.orders.findFirst({
+        where: eq(orders.id, orderId),
+      })
+
+      if (!order) throw new Error('Order not found')
+      if (!order.isPaid) throw new Error('Order is not paid')
+      
+      // Check if the vendor owns this order
+      if (order.vendorID !== session.user.id) {
+        throw new Error('Unauthorized: You can only update your own orders')
+      }
+
+      // Prepare update data
+      const updateData: any = { orderStatus: status }
+
+      // If status is 'Delivered', update delivery fields
+      if (status === 'Delivered') {
+        updateData.isDelivered = true
+        updateData.deliveredAt = new Date()
+      }
+
+      await db
+        .update(orders)
+        .set(updateData)
+        .where(eq(orders.id, orderId))
+
+      revalidatePath('/vendor/orders')
+      
+      return {
+        success: true,
+        message: 'Order status updated successfully'
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: formatError(error)
+      }
+    }
+  }
     export async function createPayPalOrder(orderId: string) {
         try {
         const order = await db.query.orders.findFirst({

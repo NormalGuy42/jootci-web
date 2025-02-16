@@ -163,7 +163,7 @@ const HeroSection = () => {
       <div className="tagline absolute top-1/3 ">
         <div className="">
           <h1 className="main-title">Produits sains et organiques</h1>
-          <Link href="/shop">
+          <Link href="/search">
             <button className="main-btn">Achetez maintenant</button>
           </Link>
         </div>
@@ -191,9 +191,9 @@ export default async function Home() {
         <ProductList data={latestProducts} />
       </div>
 
-      <BannerSection/>
+      {/* <BannerSection/>
       
-      <FewReasons/>
+      <FewReasons/> */}
       
       {/* <FillerSection/> */}
       {/* <BlogSection/> */}

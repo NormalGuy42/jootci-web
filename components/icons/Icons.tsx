@@ -122,3 +122,64 @@ export function ShieldIcon(){
         </svg>
     )
 }
+
+export function CheckIcon(){
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="main-green-fill">
+            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/>
+        </svg>
+    )
+}
+
+export function CrossIcon(){
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="fill-red-600">
+            <path d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"/>
+        </svg>
+    )
+}
+
+export function TruckIcon(){
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path d="M48 0C21.5 0 0 21.5 0 48L0 368c0 26.5 21.5 48 48 48l16 0c0 53 43 96 96 96s96-43 96-96l128 0c0 53 43 96 96 96s96-43 96-96l32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-64 0-32 0-18.7c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7L416 96l0-48c0-26.5-21.5-48-48-48L48 0zM416 160l50.7 0L544 237.3l0 18.7-128 0 0-96zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
+        </svg>
+    )
+}
+
+export function BagIcon(){
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="fill-blue-500">
+            <path d="M160 112c0-35.3 28.7-64 64-64s64 28.7 64 64l0 48-128 0 0-48zm-48 48l-64 0c-26.5 0-48 21.5-48 48L0 416c0 53 43 96 96 96l256 0c53 0 96-43 96-96l0-208c0-26.5-21.5-48-48-48l-64 0 0-48C336 50.1 285.9 0 224 0S112 50.1 112 112l0 48zm24 48a24 24 0 1 1 0 48 24 24 0 1 1 0-48zm152 24a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/>
+        </svg>
+    )
+}
+
+export function FinishIcon(){
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 20 20" version="1.1">
+    
+    <title>finish_line [#103]</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+    </defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Dribbble-Light-Preview" transform="translate(-260.000000, -7759.000000)" fill="#000000">
+                <g id="icons" transform="translate(56.000000, 160.000000)">
+                    <path d="M214,7611 L218,7611 L218,7607 L214,7607 L214,7611 Z M210,7607 L214,7607 L214,7603 L210,7603 L210,7607 Z M214,7603 L218,7603 L218,7599 L214,7599 L214,7603 Z M222,7599 L222,7603 L218,7603 L218,7607 L222,7607 L222,7611 L224,7611 L224,7599 L222,7599 Z M206,7607 L210,7607 L210,7611 L206,7611 L206,7619 L204,7619 L204,7599 L210,7599 L210,7603 L206,7603 L206,7607 Z" id="finish_line-[#103]">
+
+    </path>
+                </g>
+            </g>
+        </g>
+    </svg>
+    )
+}
+
+export function WarningIcon(){
+    return(
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" className="fill-yellow-300">
+            <path d="M96 64c0-17.7-14.3-32-32-32S32 46.3 32 64l0 256c0 17.7 14.3 32 32 32s32-14.3 32-32L96 64zM64 480a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/>
+        </svg>
+    )
+}

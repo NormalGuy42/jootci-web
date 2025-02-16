@@ -12,6 +12,11 @@ export function capitalize(word: string){
   return word.charAt(0).toUpperCase() + word.slice(1)
 
 }
+export function formatPaymentMethodText(paymentMethod: string){
+  if(paymentMethod == 'CashOnDelivery') return "Cash on Delivery"
+  return paymentMethod
+
+}
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: 'short', // abbreviated month name (e.g., 'Oct')

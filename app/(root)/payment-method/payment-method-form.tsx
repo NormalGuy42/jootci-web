@@ -15,6 +15,7 @@ import { updateUserPaymentMethod } from '../../../lib/actions/user.actions'
 import { DEFAULT_PAYMENT_METHOD, PAYMENT_METHODS } from '../../../lib/constants'
 import { paymentMethodSchema } from '../../../lib/validator'
 import { RadioGroup, RadioGroupItem } from '../../../components/ui/radio-group'
+import { formatPaymentMethodText } from '../../../lib/utils'
 
 
 export default function PaymentMethodForm({
@@ -83,7 +84,7 @@ export default function PaymentMethodForm({
                               />
                             </FormControl>
                             <FormLabel className="font-normal">
-                              {paymentMethod}
+                              {formatPaymentMethodText(paymentMethod)}
                             </FormLabel>
                           </FormItem>
                         ))}

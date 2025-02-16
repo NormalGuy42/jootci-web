@@ -5,9 +5,13 @@ import DeleteDialog from '../../../components/shared/delete-dialog'
 import Pagination from '../../../components/shared/pagination'
 import { Button } from '../../../components/ui/button'
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '../../../components/ui/table'
-import { deleteOrder, getAllOrders } from '../../../lib/actions/order.actions'
+import { deleteOrder, getAllOrders, updateOrderStatus } from '../../../lib/actions/order.actions'
 import { formatId, formatDateTime, formatCurrency } from '../../../lib/utils'
 import { getAllVendorOrders } from '../../../lib/actions/vendor.actions'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
+import { BagIcon, CheckIcon, CrossIcon, FinishIcon, TruckIcon, WarningIcon } from '../../../components/icons/Icons'
+import { toast } from '../../../components/ui/use-toast'
+import OrderStatusSelect from '../../../components/shared/vendor/order-status-select'
 
 export const metadata: Metadata = {
   title: `Vendor Orders - Tibb-Jox`,
@@ -32,6 +36,41 @@ export default async function OrdersPage({
     page: Number(page),
     vendorId: vendorId,
   })
+
+  const defaultOrderStatus = 
+    {
+      status: 'pending',
+      text: 'Pending Acceptance',
+      icon: <WarningIcon/>
+    }
+  
+  const vendorOrderStatusOptions = [
+    {
+      status: 'accepted',
+      text: 'Order Accepted',
+      icon: <CheckIcon/>
+    },
+    {
+      status: 'preparation',
+      text: 'Order in Preparation',
+      icon: <BagIcon/>
+    },
+    {
+      status: 'transit',
+      text: 'Order in Transit',
+      icon: <TruckIcon/>
+    },
+    {
+      status: 'delivered',
+      text: 'Delivered',
+      icon: <FinishIcon/>
+    },
+    {
+      status: 'refused',
+      text: 'Order Refused',
+      icon: <CrossIcon/>
+    },
+  ]
   return (
     <div className="space-y-2">
       <h1 className="h2-bold">Orders</h1>
@@ -43,6 +82,7 @@ export default async function OrdersPage({
               <TableHead>DATE</TableHead>
               <TableHead>BUYER</TableHead>
               <TableHead>TOTAL</TableHead>
+              <TableHead>STATUS</TableHead>
               <TableHead>PAID</TableHead>
               <TableHead>DELIVERED</TableHead>
               <TableHead>ACTIONS</TableHead>
@@ -59,6 +99,13 @@ export default async function OrdersPage({
                   {order.user ? order.user.name : 'Deleted user'}
                 </TableCell>
                 <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
+                <TableCell>
+                  <OrderStatusSelect 
+                    orderId={order.id}
+                    currentStatus={order.orderStatus}
+                    statusOptions={vendorOrderStatusOptions}
+                  />
+                </TableCell>
                 <TableCell>
                   {order.isPaid && order.paidAt
                     ? formatDateTime(order.paidAt).dateTime

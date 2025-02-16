@@ -219,6 +219,12 @@ a.active-sidenav-item{
 }
 
 /*Buttons end*/ 
+/*Order stuff start*/
+.order-select-icon svg{
+  height: 12px;
+  width: 12px;
+}
+/*Order stuff end*/
 .footer{
   color: white;
 }

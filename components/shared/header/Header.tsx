@@ -1,7 +1,7 @@
 import Link from "next/link"
 import CartButton from "./cart-button";
 import UserButton from "./user-button";
-import { Menu } from "./menu";
+import { Menu, Nav } from "./menu";
 
 
 export function AccountIcon(){
@@ -36,28 +36,20 @@ export function BagIcon(){
 
 export default async function Header(){
     
+    
     return(
         <header className="header w-full border-b border-gray-400">
             <div className={"flex justify-between header_container"}>
                 <div className="flex gap-2 pl-4">
-                    <div className="logo w-20 flex items-center">
-                        <Link href='/'>
-                            <img src="/images/appIcon.png" alt="" height={80} width={80}/>
-                        </Link>
-                    </div>
-
                     <nav className={"flex items-center"}>
-                        <ul className={"flex justify-between gap-8 desktop-menu"}>
-                            <li><a href="/">Accueil</a></li>
-                            <li><a href="/search">Shop</a></li>
-                            <li><a href="/about">A propos</a></li>
-                            <li><a href="/contact">Contact</a></li>
-                        </ul>
-                        {/* <div className="hidden md:block">
-                            <Search />
-                        </div> */}
+                        <Nav />
                         <Menu/>
                     </nav>
+                </div>
+                <div className="logo w-20 flex items-center">
+                    <Link href='/'>
+                        <img src="/images/appIcon.png" alt="" height={80} width={80}/>
+                    </Link>
                 </div>
                 <div className="flex items-center gap-2 pr-4">
                     <CartButton/>

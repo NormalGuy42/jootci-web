@@ -138,7 +138,7 @@ export const config = {
      const requiresAuth = protectedPaths.some(path => pathname.startsWith(path))
 
      // If not logged in and trying to access any protected path (including admin/vendor)
-     if (!auth?.user && (requiresAuth || pathname.startsWith('/admin') || pathname.startsWith('/vendor'))) {
+     if (!auth?.user && (requiresAuth || pathname.startsWith('/admin') || pathname.startsWith('/vendor') || pathname.startsWith('/mod'))) {
        return false // This will redirect to sign-in
      }
 
@@ -149,10 +149,20 @@ export const config = {
          return Response.redirect(new URL('/unauthorized', request.url))
        }
 
+       // Mod route protection
+       if (pathname.startsWith('/mod') && auth.user.role !== 'mod') {
+        return Response.redirect(new URL('/unauthorized', request.url))
+      }
+
        // Vendor route protection
        if (pathname.startsWith('/vendor') && auth.user.role !== 'vendor') {
          return Response.redirect(new URL('/unauthorized', request.url))
        }
+
+       // If user navigates to user page they are not supposed to
+       if (pathname.startsWith('/user') && auth.user.role !== 'user') {
+        return Response.redirect(new URL('/unauthorized', request.url))
+      }
      }
       // Admin route protection
       // if (pathname.startsWith('/admin')) {
