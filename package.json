@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "schema:generate": "drizzle-kit generate",
+    "db:init-schema": "drizzle-kit push",
+    "db:seed": "npx ts-node lib/seed.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.5.0",
