@@ -44,16 +44,25 @@ export async function updateCategory(data: z.infer<typeof updateCategorySchema>)
 
 // GET
 export async function getCategoryById(productId: string) {
-    return await db.query.categories.findFirst({
-      where: eq(categories.id, productId),
-    })
+    try {
+      return await db.query.categories.findFirst({
+        where: eq(categories.id, productId),
+      })
+    } catch (error) {
+      console.error('Error fetching category by id:', error)
+      return null
+    }
   }
 
-
-export async function getCategories(){
-  return await db.query.categories.findMany({
-    orderBy: [asc(categories.createdAt)],
-  })
+export async function getCategories() {
+  try {
+    return await db.query.categories.findMany({
+      orderBy: [asc(categories.createdAt)],
+    })
+  } catch (error) {
+    console.error('Error fetching categories:', error)
+    return []
+  }
 }
 
 export async function getAllCategories({
@@ -63,15 +72,23 @@ export async function getAllCategories({
   limit?: number
   page: number
 }) {
-  const data = await db.query.categories.findMany({
-    orderBy: [desc(categories.createdAt)],
-    limit,
-    offset: (page - 1) * limit,
-  })
-  const dataCount = await db.select({ count: count() }).from(categories)
-  return {
-    data,
-    totalPages: Math.ceil(dataCount[0].count / limit),
+  try {
+    const data = await db.query.categories.findMany({
+      orderBy: [desc(categories.createdAt)],
+      limit,
+      offset: (page - 1) * limit,
+    })
+    const dataCount = await db.select({ count: count() }).from(categories)
+    return {
+      data,
+      totalPages: Math.ceil(dataCount[0].count / limit),
+    }
+  } catch (error) {
+    console.error('Error fetching all categories:', error)
+    return {
+      data: [],
+      totalPages: 0
+    }
   }
 }
 

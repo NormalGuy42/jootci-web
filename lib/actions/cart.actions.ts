@@ -167,16 +167,33 @@ export const updateCartItemQuantity = async (data: CartItem) => {
     }
   }
 export async function getMyCart() {
-    const sessionCartId = cookies().get('sessionCartId')?.value
-    if (!sessionCartId) return undefined
-    const session = await auth()
-    const userId = session?.user.id
-    const cart = await db.query.carts.findFirst({
-      where: userId
-        ? eq(carts.userId, userId)
-        : eq(carts.sessionCartId, sessionCartId),
-    })
-    return cart
+    try {
+      const sessionCartId = cookies().get('sessionCartId')?.value
+      if (!sessionCartId) return undefined
+      const session = await auth()
+      const userId = session?.user.id
+      const cart = await db.query.carts.findFirst({
+        where: userId
+          ? eq(carts.userId, userId)
+          : eq(carts.sessionCartId, sessionCartId),
+      })
+      return cart
+    } catch (error) {
+      // Return a default cart structure instead of undefined
+      console.error('Error fetching cart:', error)
+      return {
+        id: '',
+        userId: null,
+        sessionCartId: cookies().get('sessionCartId')?.value || '',
+        items: [],
+        itemsPrice: '0.00',
+        shippingPrice: '0.00',
+        taxPrice: '0.00',
+        totalPrice: '0.00',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    }
   }
 
   export const removeItemFromCart = async (productId: string) => {

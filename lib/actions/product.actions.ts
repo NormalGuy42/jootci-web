@@ -59,11 +59,16 @@ export async function getAllowedProductById(productId: string) {
 
 
 export async function getLatestProducts() {
-  const data = await db.query.products.findMany({
-    orderBy: [desc(products.createdAt)],
-    limit: 4,
-  })
-  return data
+  try {
+    const data = await db.query.products.findMany({
+      orderBy: [desc(products.createdAt)],
+      limit: 4,
+    })
+    return data
+  } catch (error) {
+    console.error('Error fetching latest products:', error)
+    return []
+  }
 }
 
 export async function getProductBySlug(slug: string) {
@@ -89,44 +94,52 @@ export async function getAllProducts({
   rating?: string
   sort?: string
 }) {
-  const queryFilter =
-    query && query !== 'all' ? ilike(products.name, `%${query}%`) : undefined
-  const categoryFilter =
-    category && category !== 'all' ? eq(products.category, category) : undefined
-  const ratingFilter =
-    rating && rating !== 'all'
-      ? sql`${products.rating} >= ${rating}`
-      : undefined
-  // 100-200
-  const priceFilter =
-    price && price !== 'all'
-      ? sql`${products.price} >= ${price.split('-')[0]} AND ${
-          products.price
-        } <= ${price.split('-')[1]}`
-      : undefined
-  const order =
-    sort === 'lowest'
-      ? products.price
-      : sort === 'highest'
-      ? desc(products.price)
-      : sort === 'rating'
-      ? desc(products.rating)
-      : desc(products.createdAt)
-  const condition = and(queryFilter, categoryFilter, ratingFilter, priceFilter)
-  const data = await db
-    .select()
-    .from(products)
-    .where(condition)
-    .orderBy(order)
-    .offset((page - 1) * limit)
-    .limit(limit)
-  const dataCount = await db
-    .select({ count: count() })
-    .from(products)
-    .where(condition)
-  return {
-    data,
-    totalPages: Math.ceil(dataCount[0].count / limit),
+  try {
+    const queryFilter =
+      query && query !== 'all' ? ilike(products.name, `%${query}%`) : undefined
+    const categoryFilter =
+      category && category !== 'all' ? eq(products.category, category) : undefined
+    const ratingFilter =
+      rating && rating !== 'all'
+        ? sql`${products.rating} >= ${rating}`
+        : undefined
+    // 100-200
+    const priceFilter =
+      price && price !== 'all'
+        ? sql`${products.price} >= ${price.split('-')[0]} AND ${
+            products.price
+          } <= ${price.split('-')[1]}`
+        : undefined
+    const order =
+      sort === 'lowest'
+        ? products.price
+        : sort === 'highest'
+        ? desc(products.price)
+        : sort === 'rating'
+        ? desc(products.rating)
+        : desc(products.createdAt)
+    const condition = and(queryFilter, categoryFilter, ratingFilter, priceFilter)
+    const data = await db
+      .select()
+      .from(products)
+      .where(condition)
+      .orderBy(order)
+      .offset((page - 1) * limit)
+      .limit(limit)
+    const dataCount = await db
+      .select({ count: count() })
+      .from(products)
+      .where(condition)
+    return {
+      data,
+      totalPages: Math.ceil(dataCount[0].count / limit),
+    }
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    return {
+      data: [],
+      totalPages: 0
+    }
   }
 }
 
@@ -151,11 +164,16 @@ return {
 
 
 export async function getAllProductCategories() {
-  const data = await db
-    .selectDistinctOn([products.category], { name: products.category })
-    .from(products)
-    .orderBy(products.category)
-  return data
+  try {
+    const data = await db
+      .selectDistinctOn([products.category], { name: products.category })
+      .from(products)
+      .orderBy(products.category)
+    return data
+  } catch (error) {
+    console.error('Error fetching product categories:', error)
+    return []
+  }
 }
 
 
